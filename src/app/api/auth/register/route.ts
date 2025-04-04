@@ -1,11 +1,12 @@
-import { connectDB } from "@/lib/db";
-import User from "@/models/User";
+import connectDB from "@/lib/connectDB";
+import User from "@/model/user";
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
+    console.log("Connected to MongoDB");
     const body = await req.json();
 
     const existingUser = await User.findOne({ username: body.username });
@@ -17,9 +18,13 @@ export async function POST(req: NextRequest) {
     const hash = await bcrypt.hash(body.password, salt);
 
     const newUser = new User({
-      username: body.username,
-      email: body.email,
-      password: hash,
+        username: body.username,
+        email: body.email,
+        password: hash,
+        contactNumber: body.contactNumber,
+        location: body.location,
+        category: body.category,
+        role: body.role,
     });
 
     await newUser.save();

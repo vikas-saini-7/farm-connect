@@ -1,9 +1,10 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { connectDB } from "@/lib/db";
-import User from "@/models/User";
+import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcrypt";
 import type { NextAuthOptions } from "next-auth";
+import connectDB from "@/lib/connectDB";
+import User from "@/model/user";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -30,7 +31,23 @@ export const authOptions: NextAuthOptions = {
         };
       },
     }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) token.id = user.id;
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+      }
+      return session;
+    },
+  },
   session: {
     strategy: "jwt",
   },
