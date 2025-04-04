@@ -1,0 +1,36 @@
+import mongoose from "mongoose";
+
+const ProductSchema = new mongoose.Schema({
+  category: {
+    type: String,
+    enum: ["Fruits", "Vegetables", "Grains", "Dairy", "Livestock", "Others"], // Defined categories
+    required: true,
+  },
+  productName: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  image: {
+    type: String, // Store image URL (can use Cloudinary, Firebase, etc.)
+    required: true,
+  },
+  quantity: {
+    type: Number,
+    required: true,
+  },
+  seller_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User", // Reference to User model (Seller)
+    required: true,
+  },
+}, { timestamps: true });
+
+export default mongoose.models.Product || mongoose.model("Product", ProductSchema);
