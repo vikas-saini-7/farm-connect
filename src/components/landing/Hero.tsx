@@ -1,75 +1,44 @@
-"use client";
+'use client'
 
-import Image from "next/image";
-import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion'
+import Image from 'next/image'
 
-const Hero = () => {
+export default function Hero() {
   return (
-    <section className="relative h-screen flex items-center justify-center bg-[#0F0F0F] text-white overflow-hidden">
-      {/* Background Image with Gradient Overlay */}
-      <div className="absolute inset-0">
-        <Image
-          src="/farmers.jpg" // ✅ Corrected Path
-          alt="Farm Field"
-          layout="fill"
-          objectFit="cover"
-          quality={100}
-          className="brightness-75"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-[#0F0F0F]/50"></div>
-      </div>
-
-      {/* Content */}
-      <div className="relative z-10 text-center px-6 md:px-12">
-        <motion.h1
-          className="text-4xl md:text-6xl font-extrabold text-[#00E87B] drop-shadow-lg"
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
+    <section className="bg-gradient-to-br from-green-100 via-yellow-50 to-white py-16 md:py-28">
+      <div className="max-w-7xl mx-auto px-4 flex flex-col-reverse md:flex-row items-center gap-10">
+        
+        {/* Text Content */}
+        <motion.div 
+          className="flex-1 text-center md:text-left"
+          initial={{ opacity: 0, x: -60 }} 
+          animate={{ opacity: 1, x: 0 }} 
           transition={{ duration: 1 }}
         >
-          Connecting <span className="text-[#F47400]">Farmers</span> to the World
-        </motion.h1>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-green-800 leading-tight mb-4">
+            Welcome to <span className="text-yellow-500">FarmConnect</span>
+          </h1>
+          <p className="text-lg text-gray-700 max-w-xl">
+            A digital bridge between <strong>farmers</strong> and <strong>buyers</strong>. Compare prices, explore nearby markets, and grow with technology—made simple for rural communities.
+          </p>
+        </motion.div>
 
-        <motion.p
-          className="mt-4 text-lg md:text-xl text-gray-200 max-w-2xl mx-auto drop-shadow"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
+        {/* Hero Image */}
+        <motion.div 
+          className="flex-1"
+          initial={{ opacity: 0, y: 60 }} 
+          animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 1.2 }}
         >
-          Buy fresh products directly from farmers at the best prices. Sell and grow your business effortlessly!
-        </motion.p>
-
-        {/* Buttons */}
-        <div className="mt-8 flex justify-center space-x-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.5 }}
-          >
-            <Link
-              href="/marketplace"
-              className="bg-[#F71616] hover:bg-[#8860F4] text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg transition duration-300"
-            >
-              Explore Marketplace
-            </Link>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.8 }}
-          >
-            <Link
-              href="/farmers"
-              className="bg-[#00E87B] hover:bg-[#F47400] text-black px-6 py-3 rounded-full text-lg font-semibold shadow-lg transition duration-300"
-            >
-              Join as a Farmer
-            </Link>
-          </motion.div>
-        </div>
+          <img
+            src="farmer-hero.jpg"  // Replace with your image
+            alt="Farmer standing in field"
+            width={600}
+            height={400}
+            className="rounded-3xl shadow-2xl"
+          />
+        </motion.div>
       </div>
     </section>
-  );
-};
-
-export default Hero;
+  )
+}
