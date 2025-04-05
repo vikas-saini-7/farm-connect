@@ -1,54 +1,67 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import Link from 'next/link'
+import { useState } from 'react'
 
-const Header = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+export default function Header() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <header className="bg-[#0F0F0F] text-white shadow-lg">
-      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+    <header className="bg-gradient-to-r from-green-600 via-lime-500 to-yellow-400 shadow-lg">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         
         {/* Logo */}
-        <Link href="/" className="text-3xl font-extrabold tracking-wide flex items-center text-[#00E87B]">
-          🌾 <span className="ml-1">FarmersHub</span>
-        </Link>
+        <div className="text-white text-2xl font-extrabold tracking-wide font-serif">
+          <Link href="/">🌾 FarmConnect</Link>
+        </div>
 
-        {/* Navigation Menu (Desktop) */}
-        <nav className="hidden md:flex space-x-6 text-lg font-medium">
-          <Link href="/" className="hover:text-[#F47400] transition duration-300">Home</Link>
-          <Link href="/marketplace" className="hover:text-[#F47400] transition duration-300">Marketplace</Link>
-          <Link href="/farmers" className="hover:text-[#F47400] transition duration-300">Farmers</Link>
-          <Link href="/buyers" className="hover:text-[#F47400] transition duration-300">Buyers</Link>
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex space-x-6 text-white font-medium text-lg">
+          <Link href="/" className="hover:text-yellow-100 transition duration-200">Home</Link>
+          <Link href="/marketplace" className="hover:text-yellow-100 transition duration-200">Marketplace</Link>
+          <Link href="/farmer" className="hover:text-yellow-100 transition duration-200">Farmer</Link>
+          <Link href="/buyer" className="hover:text-yellow-100 transition duration-200">Buyer</Link>
         </nav>
 
-        {/* Login Button */}
-        <Link href="/login" className="hidden md:flex bg-[#F71616] text-white px-5 py-2 rounded-full font-semibold shadow-md hover:bg-[#8860F4] hover:scale-105 transition duration-300">
-          Login / Signup
-        </Link>
+        {/* Auth Buttons */}
+        <div className="space-x-4 hidden md:flex">
+          <Link href="/login">
+            <button className="bg-white text-green-700 px-4 py-2 rounded-xl font-semibold shadow hover:bg-green-100 transition duration-200">
+              Login
+            </button>
+          </Link>
+          <Link href="/signup">
+            <button className="bg-yellow-300 text-white px-4 py-2 rounded-xl font-semibold shadow hover:bg-yellow-400 transition duration-200">
+              Sign Up
+            </button>
+          </Link>
+        </div>
 
-        {/* Mobile Menu Button */}
-        <button className="md:hidden text-white" onClick={() => setMenuOpen(!menuOpen)}>
-          {menuOpen ? <X size={30} /> : <Menu size={30} />}
-        </button>
+        {/* Mobile Menu Toggle */}
+        <div className="md:hidden">
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-white focus:outline-none">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round"
+                strokeWidth={2} d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
+            </svg>
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
-      {menuOpen && (
-        <nav className="md:hidden bg-[#272727] text-white py-4 space-y-4 text-center">
-          <Link href="/" className="block hover:text-[#F47400] transition duration-300">Home</Link>
-          <Link href="/marketplace" className="block hover:text-[#F47400] transition duration-300">Marketplace</Link>
-          <Link href="/farmers" className="block hover:text-[#F47400] transition duration-300">Farmers</Link>
-          <Link href="/buyers" className="block hover:text-[#F47400] transition duration-300">Buyers</Link>
-          <Link href="/login" className="inline-block bg-[#F71616] text-white px-5 py-2 rounded-full font-semibold shadow-md hover:bg-[#8860F4] hover:scale-105 transition duration-300">
-            Login / Signup
-          </Link>
-        </nav>
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-green-700 text-white px-6 py-4 space-y-2 font-medium">
+          <Link href="/" className="block hover:text-yellow-200">Home</Link>
+          <Link href="/marketplace" className="block hover:text-yellow-200">Marketplace</Link>
+          <Link href="/farmer" className="block hover:text-yellow-200">Farmer</Link>
+          <Link href="/buyer" className="block hover:text-yellow-200">Buyer</Link>
+          <div className="pt-2">
+            <Link href="/login" className="block hover:text-yellow-300">Login</Link>
+            <Link href="/signup" className="block hover:text-yellow-300">Sign Up</Link>
+          </div>
+        </div>
       )}
     </header>
-  );
-};
-
-export default Header;
+  )
+}
