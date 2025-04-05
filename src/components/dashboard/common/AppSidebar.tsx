@@ -40,24 +40,24 @@ const farmerNav = [
   },
   {
     title: "Calendar",
-    url: "/dashboard/calendar",
+    url: "/dashboard/calender",
     icon: Home,
   },
   {
     title: "Weather",
-    url: "/dashboard/crops",
+    url: "/dashboard/weather",
     icon: Leaf,
   },
   {
     title: "Wallet",
-    url: "/dashboard/crops",
+    url: "/dashboard/wallet",
     icon: Leaf,
   },
 
 
   {
     title: "Get Contacts (adviser/pets-dr)",
-    url: "/dashboard/crops",
+    url: "/dashboard/contact",
     icon: Leaf,
   },
 
