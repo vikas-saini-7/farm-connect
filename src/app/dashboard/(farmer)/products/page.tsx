@@ -147,12 +147,11 @@ import { Label } from '@/components/ui/label'
 
 interface Product {
   _id: string
-  name: string
+  productName: string
   price: number
   quantity: number
   category: string
-  status: "available" | "out_of_stock"
-  imageUrl: string
+  image: string
 }
 
 const ProductsPage = () => {
@@ -215,11 +214,11 @@ const ProductsPage = () => {
 
     try {
       const response = await axios.put(`/api/product/update/${selectedProduct._id}`, {
-        productName: selectedProduct.name,
+        productName: selectedProduct.productName,
         category: selectedProduct.category,
         price: selectedProduct.price,
         quantity: selectedProduct.quantity,
-        image: selectedProduct.imageUrl
+        image: selectedProduct.image
       })
 
       if (response.data.success) {
@@ -271,28 +270,27 @@ const ProductsPage = () => {
               <TableHead>Category</TableHead>
               <TableHead>Price</TableHead>
               <TableHead>Quantity</TableHead>
-              <TableHead>Status</TableHead>
+              {/* <TableHead>Status</TableHead> */}
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {products.map((product, index) => (
+            {products?.map((product, index) => (
               <TableRow key={index} className="h-24">
                 <TableCell className="w-24">
                   <div className="relative w-20 h-20">
-                    <Image
-                      src={product.imageUrl}
-                      alt={product.name}
-                      fill
+                    <img
+                      src={product.image}
+                      alt={product.productName}
                       className="object-cover rounded-md"
                     />
                   </div>
                 </TableCell>
-                <TableCell className="font-medium">{product.name}</TableCell>
+                <TableCell className="font-medium">{product.productName}</TableCell>
                 <TableCell>{product.category}</TableCell>
-                <TableCell>${product.price.toFixed(2)}</TableCell>
+                <TableCell>Rs. {product.price.toFixed(2)}</TableCell>
                 <TableCell>{product.quantity}</TableCell>
-                <TableCell>
+                {/* <TableCell>
                   <span className={`px-2 py-1 rounded-full text-xs ${
                     product.status === "available"
                       ? "bg-green-100 text-green-800"
@@ -300,7 +298,7 @@ const ProductsPage = () => {
                   }`}>
                     {product.status === "available" ? "Available" : "Out of Stock"}
                   </span>
-                </TableCell>
+                </TableCell> */}
                 <TableCell>
                   <div className="flex gap-2">
                     <Button variant="outline" size="icon" onClick={() => handleEdit(product)}>
@@ -333,7 +331,7 @@ const ProductsPage = () => {
                 <Label htmlFor="name">Product Name</Label>
                 <Input
                   name="name"
-                  value={selectedProduct.name}
+                  value={selectedProduct.productName}
                   onChange={handleChange}
                   required
                 />
@@ -371,7 +369,7 @@ const ProductsPage = () => {
                 <Label htmlFor="imageUrl">Image URL</Label>
                 <Input
                   name="imageUrl"
-                  value={selectedProduct.imageUrl}
+                  value={selectedProduct.image}
                   onChange={handleChange}
                   required
                 />

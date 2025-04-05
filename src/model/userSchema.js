@@ -35,7 +35,7 @@ const UserSchema = new mongoose.Schema({
   }],
   category: {
     type: String,
-    enum: ["Fruits", "Vegetables", "Grains", "Others"],
+    enum: ["Fruits", "Vegetables", "Grains", "Dairy", "Livestock" , "Others"],
  
   },
   role: {
