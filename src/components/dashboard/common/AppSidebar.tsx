@@ -5,6 +5,7 @@ import {
   Leaf,
   Package,
   Settings,
+  ShoppingBag,
   Store,
   Users,
 } from "lucide-react";
@@ -22,6 +23,8 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+const farmer = false; // "farmer" | "buyer"
+
 const farmerNav = [
   {
     title: "Dashboard",
@@ -31,7 +34,7 @@ const farmerNav = [
   {
     title: "Manage Products",
     url: "/dashboard/products",
-    icon: Home,
+    icon: ShoppingBag,
   },
   {
     title: "Find Buyer",
@@ -53,34 +56,63 @@ const farmerNav = [
     url: "/dashboard/wallet",
     icon: Leaf,
   },
-
-
   {
-    title: "Get Contacts (adviser/pets-dr)",
+    title: "Get Contacts",
     url: "/dashboard/contact",
     icon: Leaf,
   },
-
-
-  // {
-  //   title: "Marketplace",
-  //   url: "dashboard/marketplace",
-  //   icon: Store,
-  // },
   {
     title: "Analytics",
     url: "/dashboard/analytics",
     icon: BarChart2,
   },
   {
-    title: "Orders",
-    url: "/dashboard/orders",
-    icon: Package,
-  },
-  {
     title: "Community",
     url: "/dashboard/community",
     icon: Users,
+  },
+];
+
+const buyerNav = [
+  {
+    title: "Dashboard",
+    url: "/dashboard",
+    icon: Home,
+  },
+  // {
+  //   title: "Manage Products",
+  //   url: "/dashboard/products",
+  //   icon: Home,
+  // },
+  {
+    title: "Find Farmer",
+    url: "/dashboard/find-farmer",
+    icon: Home,
+  },
+  {
+    title: "Calendar",
+    url: "/dashboard/calender",
+    icon: Home,
+  },
+  // {
+  //   title: "Weather",
+  //   url: "/dashboard/weather",
+  //   icon: Leaf,
+  // },
+  // {
+  //   title: "Wallet",
+  //   url: "/dashboard/wallet",
+  //   icon: Leaf,
+  // },
+  {
+    title: "Get Contacts",
+    url: "/dashboard/contact-buyer",
+    icon: Leaf,
+  },
+  {
+    title: "Analytics",
+    url: "/dashboard/analytics",
+    icon: BarChart2,
   },
 ];
 
@@ -99,13 +131,15 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {farmerNav.map((item) => {
-                const isActive = pathname === item.url;
-                return (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      className={`
+              {farmer ? (
+                <>
+                  {farmerNav.map((item) => {
+                    const isActive = pathname === item.url;
+                    return (
+                      <SidebarMenuItem key={item.title}>
+                        <SidebarMenuButton
+                          asChild
+                          className={`
                         px-6 py-3 flex items-center gap-3 rounded-lg transition-all duration-200
                         ${
                           isActive
@@ -113,19 +147,51 @@ export function AppSidebar() {
                             : "text-gray-600 hover:text-green-600 hover:bg-green-50 dark:text-gray-300 dark:hover:bg-green-900/20"
                         }
                       `}
-                    >
-                      <Link href={item.url}>
-                        <item.icon
-                          className={`w-5 h-5 ${
-                            isActive ? "stroke-[2.5px]" : ""
-                          }`}
-                        />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
+                        >
+                          <Link href={item.url}>
+                            <item.icon
+                              className={`w-5 h-5 ${
+                                isActive ? "stroke-[2.5px]" : ""
+                              }`}
+                            />
+                            <span>{item.title}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  })}
+                </>
+              ) : (
+                <>
+                  {buyerNav.map((item) => {
+                    const isActive = pathname === item.url;
+                    return (
+                      <SidebarMenuItem key={item.title}>
+                        <SidebarMenuButton
+                          asChild
+                          className={`
+                        px-6 py-3 flex items-center gap-3 rounded-lg transition-all duration-200
+                        ${
+                          isActive
+                            ? "bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400 font-semibold"
+                            : "text-gray-600 hover:text-green-600 hover:bg-green-50 dark:text-gray-300 dark:hover:bg-green-900/20"
+                        }
+                      `}
+                        >
+                          <Link href={item.url}>
+                            <item.icon
+                              className={`w-5 h-5 ${
+                                isActive ? "stroke-[2.5px]" : ""
+                              }`}
+                            />
+                            <span>{item.title}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  })}
+                </>
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
