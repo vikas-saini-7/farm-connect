@@ -1,4 +1,5 @@
-import React from 'react'
+"use client"
+import React, { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import {
@@ -11,6 +12,7 @@ import {
 } from "@/components/ui/table"
 import { Plus, Pencil, Trash } from "lucide-react"
 import Link from "next/link"
+import axios from 'axios'
 
 interface Product {
   id: string
@@ -19,23 +21,39 @@ interface Product {
   quantity: number
   category: string
   status: "available" | "out_of_stock"
-  imageUrl: string // Added image URL field
+  imageUrl: string
 }
 
 const ProductsPage = () => {
-  // This would be replaced with actual data fetching
-  const products: Product[] = [
-    {
-      id: "1",
-      name: "Organic Tomatoes",
-      price: 2.99,
-      quantity: 100,
-      category: "Vegetables",
-      status: "available",
-      imageUrl: "/images/tomatoes.jpg" // Add sample image path
-    },
-    // Add more sample products as needed
-  ]
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true)
+        const response = await axios.get('/api/product/allProduct')
+        setProducts(response.data.data)
+        setError(null)
+      } catch (err) {
+        setError('Failed to fetch products')
+        console.error('Error fetching products:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProducts()
+  }, [])
+
+  if (loading) {
+    return <div className="p-6">Loading products...</div>
+  }
+
+  if (error) {
+    return <div className="p-6 text-red-500">{error}</div>
+  }
 
   return (
     <div className="p-6">
@@ -63,8 +81,8 @@ const ProductsPage = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {products.map((product) => (
-              <TableRow key={product.id} className="h-24"> {/* Increased row height */}
+            {products?.map((product) => (
+              <TableRow key={product.id} className="h-24">
                 <TableCell className="w-24">
                   <div className="relative w-20 h-20">
                     <Image

@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 import connectDB from "../../../../lib/connectDB";
 import Product from "../../../../model/productSchema";
-// import User from "../../../../model/userSchema";
-import { getSessionUser } from "../../../../lib/getSession";
 import { authOptions } from "../../auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
 
 export async function POST(req) {
     await connectDB();
@@ -15,7 +14,7 @@ export async function POST(req) {
         return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
       }
   
-      const sellerId = session.user._id;
+      const sellerId = session.user.id;
       const body = await req.json();
       const { category, productName, description, price, image, quantity } = body;
   
