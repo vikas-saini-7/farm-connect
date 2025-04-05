@@ -23,7 +23,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const farmer = false; // "farmer" | "buyer"
+const farmer = true; // "farmer" | "buyer"
 
 const farmerNav = [
   {
