@@ -1,6 +1,8 @@
 "use client"
 
 import React, { useState } from 'react'
+import axios from 'axios'
+// import { useToast } from "@/components/ui/use-toast"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -15,6 +17,7 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 
 const ProductCreate = () => {
+//   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     category: '',
@@ -45,15 +48,30 @@ const ProductCreate = () => {
     setLoading(true)
 
     try {
-      // Add your API call here to save the product
-    //   toast({
-    //     title: "Success",
-    //     description: "Product created successfully",
-    //   })
-    } catch (error) {
+      const response = await axios.post('/api/product/add', formData)
+      
+      if (response.data.success) {
+        // toast({
+        //   title: "Success",
+        //   description: "Product created successfully",
+        // })
+        // Reset form
+        setFormData({
+          category: '',
+          productName: '',
+          description: '',
+          price: '',
+          image: '',
+          quantity: ''
+        })
+      } else {
+        throw new Error(response.data.error || 'Failed to create product')
+      }
+    } catch (error: any) {
+      console.error('Error creating product:', error)
     //   toast({
     //     title: "Error",
-    //     description: "Failed to create product",
+    //     description: error.response?.data?.error || error.message || "Failed to create product",
     //     variant: "destructive",
     //   })
     } finally {

@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/authOptions";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import connectDB from "@/lib/connectDB";
-import User from "@/models/userSchema";
+import User from "@/model/userSchema";
 
 connectDB();
 
 // Distance calculator (Haversine formula)
 function getDistance(lat1, lon1, lat2, lon2) {
+  console.log(lat1, lon1, lat2, lon2);
   const R = 6371; // Radius of Earth in kilometers
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
   const dLon = ((lon2 - lon1) * Math.PI) / 180;
@@ -50,6 +51,7 @@ export async function POST(req) {
         if (latitude == null || longitude == null) return null;
 
         const distance = getDistance(sellerLat, sellerLon, latitude, longitude);
+        console.log("Distance:", distance);
         return {
           buyerId: buyer._id,
           name: buyer.username,
