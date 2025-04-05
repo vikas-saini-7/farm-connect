@@ -29,6 +29,11 @@ const farmerNav = [
     icon: Home,
   },
   {
+    title: "Manage Products",
+    url: "/dashboard/products",
+    icon: Home,
+  },
+  {
     title: "Find Buyer",
     url: "/dashboard/find-buyer",
     icon: Home,
