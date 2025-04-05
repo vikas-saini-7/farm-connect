@@ -13,13 +13,18 @@ const ReviewSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ["Seller", "Buyer"],
+    enum: ["Seller", "Buyer"], // Reviewed user's role
     required: true,
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true,
+    required: true, // The person who is being reviewed
+  },
+  reviewedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true, // The person who gave the review
   },
 }, { timestamps: true });
 

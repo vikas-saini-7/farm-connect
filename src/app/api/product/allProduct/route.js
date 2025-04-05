@@ -1,22 +1,23 @@
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/[...nextauth]/route";
 import connectDB from "../../../../lib/connectDB";
-import Product from "../../../../model/productSchema"; // or productModel.js — adjust if needed
+import Product from "../../../../model/productSchema";
 
 connectDB();
 
 export async function GET(req) {
   try {
-    const { searchParams } = new URL(req.url);
-    const sellerId = searchParams.get("seller_id");
+    const session = await getServerSession(authOptions);
 
-    if (!sellerId) {
+    if (!session || !session.user) {
       return NextResponse.json(
-        { success: false, error: "seller_id is required" },
-        { status: 400 }
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
       );
     }
 
-    const products = await Product.find({ seller_id: sellerId });
+    const products = await Product.find({ seller_id: session.user.id });
 
     return NextResponse.json(
       { success: true, data: products },
