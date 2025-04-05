@@ -11,11 +11,16 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Bell, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useProfile } from "@/store/useProfile";
 
 const DashboardHeader = () => {
-  const [isDark, setIsDark] = useState(false);
+  // const [isDark, setIsDark] = useState(false);
+
+  const profile = useProfile((state) => state.profile);
+  const isLoading = useProfile((state) => state.isLoading);
+  const error = useProfile((state) => state.error);
 
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full">
@@ -24,7 +29,7 @@ const DashboardHeader = () => {
 
         <div className="flex items-center gap-6">
           {/* Theme Toggle */}
-          <motion.button
+          {/* <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsDark(!isDark)}
@@ -35,7 +40,7 @@ const DashboardHeader = () => {
             ) : (
               <Sun className="h-5 w-5" />
             )}
-          </motion.button>
+          </motion.button> */}
 
           {/* Notification Dropdown */}
           <DropdownMenu>
@@ -81,23 +86,47 @@ const DashboardHeader = () => {
           {/* User Info and Avatar Dropdown */}
           <div className="flex items-center gap-4">
             <div className="text-right">
-              <p className="text-sm font-medium">John Doe</p>
-              <p className="text-xs text-muted-foreground">Premium Farmer</p>
+              {isLoading ? (
+                <>
+                  <div className="h-4 w-24 bg-muted animate-pulse rounded mb-1"></div>
+                  <div className="h-3 w-20 bg-muted animate-pulse rounded"></div>
+                </>
+              ) : (
+                <>
+                  <p className="text-sm font-medium">{profile?.username}</p>
+                  <p className="text-xs text-muted-foreground">Premium Farmer</p>
+                </>
+              )}
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Avatar className="cursor-pointer h-10 w-10 border-2 border-primary/10 hover:border-primary/30 transition-colors">
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback className="bg-primary/5">JD</AvatarFallback>
+                  {isLoading ? (
+                    <AvatarFallback className="bg-muted animate-pulse" />
+                  ) : (
+                    <>
+                      <AvatarImage src="https://github.com/shadcn.png" />
+                      <AvatarFallback className="bg-primary/5">JD</AvatarFallback>
+                    </>
+                  )}
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium">johndoe@example.com</p>
-                    <p className="text-xs text-muted-foreground">
-                      Manage your account
-                    </p>
+                    {isLoading ? (
+                      <>
+                        <div className="h-4 w-32 bg-muted animate-pulse rounded mb-1"></div>
+                        <div className="h-3 w-28 bg-muted animate-pulse rounded"></div>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-sm font-medium">johndoe@example.com</p>
+                        <p className="text-xs text-muted-foreground">
+                          Manage your account
+                        </p>
+                      </>
+                    )}
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />

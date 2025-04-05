@@ -1,0 +1,69 @@
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOptions";
+import connectDB from "@/lib/connectDB";
+import User from "@/models/userSchema";
+
+connectDB();
+
+// Distance calculator (Haversine formula)
+function getDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // Radius of Earth in kilometers
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) ** 2;
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c; // Distance in kilometers
+}
+
+export async function POST(req) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const sellerId = session.user.id;
+    const { numberOfBuyers = 5 } = await req.json();
+
+    // Fetch seller's location
+    const seller = await User.findById(sellerId);
+    if (!seller || !seller.location) {
+      return NextResponse.json({ error: "Seller location not found" }, { status: 404 });
+    }
+
+    const { latitude: sellerLat, longitude: sellerLon } = seller.location;
+
+    // Find all buyers with location
+    const buyers = await User.find({ role: "buyer", location: { $exists: true } });
+
+    const buyersWithDistance = buyers
+      .map((buyer) => {
+        const { latitude, longitude } = buyer.location || {};
+        if (latitude == null || longitude == null) return null;
+
+        const distance = getDistance(sellerLat, sellerLon, latitude, longitude);
+        return {
+          buyerId: buyer._id,
+          name: buyer.username,
+          distance,
+          location: buyer.location,
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, numberOfBuyers);
+
+    return NextResponse.json({ nearestBuyers: buyersWithDistance }, { status: 200 });
+  } catch (error) {
+    console.error("Error finding nearest buyers:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}

@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import connectDB from "../../../../lib/connectDB";
 import Product from "../../../../model/productSchema";
 // import User from "../../../../model/userSchema";
-import { getSessionUser } from "@/utils/getSessionUser";
-import { authOptions } from "@/auth";
+import { getSessionUser } from "../../../../lib/getSession";
+import { authOptions } from "../../auth/[...nextauth]/route";
 
 export async function POST(req) {
     await connectDB();

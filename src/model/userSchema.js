@@ -16,12 +16,19 @@ const UserSchema = new mongoose.Schema({
   },
   contactNumber: {
     type: String,
-    required: true,
+   
   },
   location: {
-    type: String,
-    required: true,
-  },
+    title: {
+      type: String, // e.g., "Gandhi Nagar, Delhi"     
+    },
+    latitude: {
+      type: Number,    
+    },
+    longitude: {
+      type: Number,
+    }
+  },  
   reviews: {
     type: [String], // Array of review comments
     default: [],
@@ -29,12 +36,12 @@ const UserSchema = new mongoose.Schema({
   category: {
     type: String,
     enum: ["Fruits", "Vegetables", "Grains", "Others"],
-    required: true,
+ 
   },
   role: {
     type: String,
     enum: ["Seller", "Buyer"],
-    required: true,
+
   },
   isOnboarded: { type: Boolean, default: false }
 }, { timestamps: true });
