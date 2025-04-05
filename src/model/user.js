@@ -15,12 +15,10 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
   contactNumber: {
-    type: String,
-    required: true,
+    type: String
   },
   location: {
-    type: String,
-    required: true,
+    type: String
   },
   reviews: {
     type: [String], // Array of review comments
@@ -28,13 +26,11 @@ const UserSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ["Fruits", "Vegetables", "Grains", "Dairy", "Livestock", "Others"],
-    required: true,
+    enum: ["Fruits", "Vegetables", "Grains", "Dairy", "Livestock", "Others"]
   },
   role: {
     type: String,
-    enum: ["Seller", "Buyer"],
-    required: true,
+    enum: ["Seller", "Buyer"]
   },
 }, { timestamps: true });
 
