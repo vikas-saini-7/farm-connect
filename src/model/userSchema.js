@@ -29,10 +29,10 @@ const UserSchema = new mongoose.Schema({
       type: Number,
     }
   },  
-  reviews: {
-    type: [String], // Array of review comments
-    default: [],
-  },
+  reviews:[ {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Review"
+  }],
   category: {
     type: String,
     enum: ["Fruits", "Vegetables", "Grains", "Others"],
@@ -42,6 +42,12 @@ const UserSchema = new mongoose.Schema({
     type: String,
     enum: ["Seller", "Buyer"],
 
+  },
+  certificate: {
+    title: { type: String },
+    issuedBy: { type: String },
+    issuedOn: { type: Date },
+    certificateUrl: { type: String },
   },
   isOnboarded: { type: Boolean, default: false }
 }, { timestamps: true });
