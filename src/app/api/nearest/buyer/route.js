@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
+import connectDB from "../../../../lib/connectDB";
+import Product from "../../../../model/productSchema";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/authOptions";
-import connectDB from "@/lib/connectDB";
-import User from "@/models/userSchema";
+import { authOptions } from "../../auth/[...nextauth]/route";
+import User from "../../../../model/userSchema";
 
 connectDB();
 
