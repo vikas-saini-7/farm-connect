@@ -23,6 +23,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
   return R * c; // Distance in kilometers
 }
 
+
 // export async function POST(req) {
 //   try {
 //     const session = await getServerSession(authOptions);
@@ -34,8 +35,6 @@ function getDistance(lat1, lon1, lat2, lon2) {
 //     const sellerId = session.user.id;
 //     const { numberOfBuyers = 5, productId } = await req.json();
 
-//     console.log("productId:", productId);
-
 //     // Fetch seller's location
 //     const seller = await User.findById(sellerId);
 //     if (!seller || !seller.location) {
@@ -44,8 +43,21 @@ function getDistance(lat1, lon1, lat2, lon2) {
 
 //     const { latitude: sellerLat, longitude: sellerLon } = seller.location;
 
-//     // Find all buyers with location
-//     const buyers = await User.find({ role: "buyer", location: { $exists: true } });
+//     // Build the query based on whether productId is provided
+//     let query = { role: "Buyer", location: { $exists: true } };
+
+//     if (productId) {
+//       // If productId is provided, fetch product and filter by category
+//       const product = await Product.findById(productId);
+//       if (product) {
+//         query.category = product.category;
+//       }
+//     }
+
+//     console.log("Query:", query);
+
+//     // Find buyers based on the query
+//     const buyers = await User.find(query);
 
 //     const buyersWithDistance = buyers
 //       .map((buyer) => {
@@ -56,6 +68,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
 //         return {
 //           buyerId: buyer._id,
 //           name: buyer.username,
+//           category: buyer.category,
 //           distance,
 //           location: buyer.location,
 //         };
@@ -94,17 +107,15 @@ export async function POST(req) {
     let query = { role: "Buyer", location: { $exists: true } };
 
     if (productId) {
-      // If productId is provided, fetch product and filter by category
       const product = await Product.findById(productId);
       if (product) {
         query.category = product.category;
       }
     }
 
-    console.log("Query:", query);
-
-    // Find buyers based on the query
-    const buyers = await User.find(query);
+    // Find buyers and populate relevant fields
+    const buyers = await User.find(query)
+      .select('username email phone location category image'); // Select only needed fields
 
     const buyersWithDistance = buyers
       .map((buyer) => {
@@ -113,9 +124,14 @@ export async function POST(req) {
 
         const distance = getDistance(sellerLat, sellerLon, latitude, longitude);
         return {
-          buyerId: buyer._id,
-          name: buyer.username,
-          category: buyer.category,
+          buyer: {
+            id: buyer._id,
+            username: buyer.username,
+            email: buyer.email,
+            phone: buyer.phone,
+            image: buyer.image,
+            category: buyer.category
+          },
           distance,
           location: buyer.location,
         };
