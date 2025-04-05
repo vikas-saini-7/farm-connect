@@ -137,7 +137,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import bcrypt from "bcrypt";
+import bcrypt from 'bcryptjs';
 import type { NextAuthOptions } from "next-auth";
 import connectDB from "@/lib/connectDB";
 import User from "@/model/user";
