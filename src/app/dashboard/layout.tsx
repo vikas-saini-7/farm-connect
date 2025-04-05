@@ -5,6 +5,7 @@ import DashboardHeader from "@/components/dashboard/common/DashboardHeader";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
+    
     <div className="flex flex-col h-screen">
       <DashboardHeader />
       {/* Sidebar */}
