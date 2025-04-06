@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "../../../../lib/connectDB";
 import Product from "../../../../model/productSchema";
-import { authOptions } from "../../auth/[...nextauth]/route";
+import { authOptions } from "../../auth/[...nextauth]/auth";
 import { getServerSession } from "next-auth";
 
 export async function POST(req) {

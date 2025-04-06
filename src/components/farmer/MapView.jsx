@@ -15,24 +15,13 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-// Define TypeScript interface for location
-interface Location {
-  latitude: number;
-  longitude: number;
-  name?: string;
-}
 
-interface MapViewProps {
-  locations: Location[];
-  userLocation?: Location;
-  defaultZoom?: number;
-}
 
 const MapView = ({
   locations,
   userLocation,
   defaultZoom = 13,
-}: MapViewProps) => {
+}) => {
   useEffect(() => {
     // Initialize the map centered on user location or first location in the array
     const center = userLocation
@@ -41,7 +30,7 @@ const MapView = ({
       ? [locations[0].latitude, locations[0].longitude]
       : [28.6139, 77.209]; // Default to Delhi if no locations
 
-    const map = L.map("map").setView(center as L.LatLngExpression, defaultZoom);
+    const map = L.map("map").setView(center , defaultZoom);
 
     // Set up OpenStreetMap tile layer
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
