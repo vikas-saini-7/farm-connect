@@ -22,6 +22,7 @@
 // export default Dashboard;
 "use client";
 
+import DashboardPage from "@/components/dashboard/DashboardPage";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -53,7 +54,7 @@ export default function Dashboard() {
 
   return (
     <div className="text-white p-4 max-w-4xl mx-auto">
-      dashboard
+      <DashboardPage />
     </div>
   );
 }

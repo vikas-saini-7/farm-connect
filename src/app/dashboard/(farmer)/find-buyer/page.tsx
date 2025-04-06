@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { MapPin, User } from "lucide-react";
+import { MapPin, User, CheckCircle } from "lucide-react";
 import axios from "axios";
 import { useProfile } from "@/store/useProfile";
 
@@ -22,8 +22,6 @@ import {
 } from "@/components/ui/select";
 
 import dynamic from "next/dynamic";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -70,7 +68,17 @@ export default function FarmerMarketplace() {
   const [error, setError] = useState<string | null>(null);
   const [limit, setLimit] = useState<string>("5");
 
-  const { profile, isLoading: profileLoading } = useProfile();
+  const { profile } = useProfile();
+
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const handleRequestClick = () => {
+    setShowConfirmation(true);
+    setTimeout(() => {
+      setShowConfirmation(false);
+      setIsModalOpen(false);
+    }, 2000);
+  };
 
   const generateRandomPhone = () => {
     const randomNumber = Math.floor(Math.random() * 9000000000) + 1000000000;
@@ -96,25 +104,23 @@ export default function FarmerMarketplace() {
   }, []);
 
   const fetchNearbyBuyers = async () => {
+    if (!selectedProduct) return;
     try {
-      console.log(selectedProduct);
       setLoading(true);
       const response = await axios.post("/api/nearest/buyer", {
         numberOfBuyers: parseInt(limit),
         productId: selectedProduct,
       });
-      // Add phone numbers to the buyers data
-      const buyersWithPhone = response.data.nearestBuyers.map(
-        (buyer: Buyer) => ({
-          ...buyer,
-          buyer: {
-            ...buyer.buyer,
-            phone: generateRandomPhone(),
-          },
-        })
-      );
+
+      const buyersWithPhone = response.data.nearestBuyers.map((buyer: Buyer) => ({
+        ...buyer,
+        buyer: {
+          ...buyer.buyer,
+          phone: generateRandomPhone(),
+        },
+      }));
+
       setBuyers(buyersWithPhone);
-      console.log(buyersWithPhone);
       setError(null);
     } catch (err) {
       setError("Failed to fetch nearby buyers");
@@ -133,56 +139,38 @@ export default function FarmerMarketplace() {
     setIsModalOpen(true);
   };
 
-  const getProductName = (productId: string) => {
-    const product = products.find((p) => p._id === productId);
-    return product?.productName || "";
-  };
-
-  // Convert buyers to locations format for MapView
   const buyerLocations = buyers.map((buyer) => ({
     latitude: buyer.location.latitude,
     longitude: buyer.location.longitude,
-    name: buyer.location.title, // Using location title instead of buyer name
+    name: buyer.location.title,
   }));
 
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">
-          Find Buyers For Your Produce
-        </h1>
+        <h1 className="text-3xl font-bold mb-6">Find Buyers For Your Produce</h1>
 
-        {/* Filter Section */}
+        {/* Filters */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <div className="flex flex-wrap gap-6 mb-4">
             <div className="flex-1 min-w-[240px]">
-              {loading ? (
-                <div className="text-gray-500 mt-8">Loading products...</div>
-              ) : error ? (
-                <div className="text-red-500 mt-8">{error}</div>
-              ) : (
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">
-                    Select a product
-                  </label>
-                  <Select
-                    value={selectedProduct}
-                    onValueChange={setSelectedProduct}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select a product" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {products.map((product) => (
-                        <SelectItem key={product._id} value={product._id}>
-                          {product.productName}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
+              <label className="text-sm font-medium text-gray-700 mb-2 block">
+                Select a product
+              </label>
+              <Select value={selectedProduct} onValueChange={setSelectedProduct}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a product" />
+                </SelectTrigger>
+                <SelectContent>
+                  {products.map((product) => (
+                    <SelectItem key={product._id} value={product._id}>
+                      {product.productName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
+
             <div className="flex-1 min-w-[240px]">
               <label className="text-sm font-medium text-gray-700 mb-2 block">
                 Number of Buyers
@@ -201,31 +189,9 @@ export default function FarmerMarketplace() {
               </Select>
             </div>
           </div>
-
-          {/* <div className="flex flex-wrap gap-6 mb-4">
-            <div className="flex-1 min-w-[240px]">
-              <label className="text-sm font-medium text-gray-700 mb-2 block">
-                Search by location
-              </label>
-              <Input placeholder="" />
-            </div>
-            <div className="flex-1 min-w-[240px]">
-              <label className="text-sm font-medium text-gray-700 mb-2 block">
-                Number of Buyers
-              </label>
-              
-              <Button className="">Find</Button>
-            </div>
-          </div>
-
-          <div className="bg-gray-50 rounded-md p-4 mt-4">
-            <p className="text-sm text-gray-600">
-              Showing {buyers.length} nearby buyers in your area.
-            </p>
-          </div> */}
         </div>
 
-        {/* Map Section */}
+        {/* Map */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="flex items-center justify-between mb-2 pr-6">
             <h2 className="text-xl font-semibold mb-4">Nearby Buyers</h2>
@@ -314,82 +280,28 @@ export default function FarmerMarketplace() {
                     <User className="h-6 w-6 text-green-600" />
                   </div>
                   <div>
-                    <DialogTitle className="text-xl text-gray-800">
-                      {selectedBuyer.buyer.username}
-                    </DialogTitle>
-                    <DialogDescription className="flex items-center gap-2">
-                      <Badge className="bg-green-100 text-green-800 hover:bg-green-200">
-                        {selectedBuyer.buyer.category}
-                      </Badge>
-                      <span className="text-green-600">•</span>
-                      <span className="text-gray-600">
-                        {selectedBuyer.distance.toFixed(2)} km away
-                      </span>
-                    </DialogDescription>
+                    <DialogTitle>{selectedBuyer.buyer.username}</DialogTitle>
+                    <DialogDescription>{selectedBuyer.buyer.category}</DialogDescription>
                   </div>
                 </div>
               </DialogHeader>
 
-              <Separator className="bg-green-100" />
-
-              <div className="grid gap-6 py-4">
-                <Card className="p-4 bg-green-50/50 border-green-100">
-                  <div className="flex items-start gap-3">
-                    <User className="h-5 w-5 text-green-600 mt-0.5" />
-                    <div className="space-y-1.5">
-                      <h3 className="font-medium text-gray-800">
-                        Contact Information
-                      </h3>
-                      <div className="text-sm space-y-1">
-                        <p className="flex items-center gap-2 text-gray-600">
-                          Email:
-                          <span className="text-gray-800">
-                            {selectedBuyer.buyer.email}
-                          </span>
-                        </p>
-                        <p className="flex items-center gap-2 text-gray-600">
-                          Phone:
-                          <span className="text-gray-800">
-                            {selectedBuyer.buyer.phone}
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-
-                <Card className="p-4 bg-green-50/50 border-green-100">
-                  <div className="flex items-start gap-3">
-                    <MapPin className="h-5 w-5 text-green-600 mt-0.5" />
-                    <div className="space-y-1.5">
-                      <h3 className="font-medium text-gray-800">
-                        Location Details
-                      </h3>
-                      <div className="text-sm space-y-1">
-                        <p className="text-gray-600">
-                          {selectedBuyer.location.title}
-                        </p>
-                        <div className="flex gap-4 text-gray-600">
-                          <span>Lat: {selectedBuyer.location.latitude}</span>
-                          <span>Long: {selectedBuyer.location.longitude}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
+              <div className="mt-4 text-gray-700 space-y-2">
+                <p><strong>Email:</strong> {selectedBuyer.buyer.email}</p>
+                <p><strong>Phone:</strong> {selectedBuyer.buyer.phone}</p>
+                <p><strong>Distance:</strong> {selectedBuyer.distance.toFixed(2)} km</p>
+                <p><strong>Location:</strong> {selectedBuyer.location.title}</p>
               </div>
 
-              <div className="flex justify-end gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setIsModalOpen(false)}
-                  className="hover:bg-green-50 hover:text-green-700 hover:border-green-200"
-                >
-                  Close
-                </Button>
-                <Button className="bg-green-600 hover:bg-green-700 text-white">
-                  Request Buy for visit
-                </Button>
+              <div className="mt-6 flex justify-end">
+                {showConfirmation ? (
+                  <div className="flex items-center text-green-600 font-medium gap-2">
+                    <CheckCircle className="h-5 w-5" />
+                    Request Sent!
+                  </div>
+                ) : (
+                  <Button onClick={handleRequestClick}>Send Request</Button>
+                )}
               </div>
             </>
           )}
