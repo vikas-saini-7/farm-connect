@@ -105,7 +105,17 @@ const MapView = ({
     };
   }, [locations, userLocation, defaultZoom]);
 
-  return <div id="map" style={{ height: "400px", width: "100%" }}></div>;
+  return (
+    <div
+      id="map"
+      style={{
+        height: "400px",
+        width: "100%",
+        position: "relative",
+        zIndex: 0,
+      }}
+    ></div>
+  );
 };
 
 export default MapView;

@@ -1,306 +1,9 @@
-// "use client";
-
-// import { useState, useEffect } from "react";
-// import { MapPin, User } from "lucide-react";
-// import axios from "axios";
-
-// import { Button } from "@/components/ui/button";
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogDescription,
-//   DialogHeader,
-//   DialogTitle,
-// } from "@/components/ui/dialog";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-// // import BuyerMap from "@/components/farmer/BuyerMap";
-
-// import dynamic from "next/dynamic";
-
-// const MapView = dynamic(() => import("@/components/farmer/MapView"), {
-//   ssr: false,
-// });
-
-// const locations = [
-//   { latitude: 28.6139, longitude: 77.209, name: "Location 1" },
-//   { latitude: 28.6229, longitude: 77.21, name: "Location 2" },
-//   { latitude: 28.6339, longitude: 77.22, name: "Location 3" },
-// ];
-
-// const userLocation = {
-//   latitude: 28.6129,
-//   longitude: 77.2099,
-// };
-
-// const BUYERS = [
-//   {
-//     id: 1,
-//     name: "Green Valley Produce",
-//     category: "wholesaler",
-//     location: { lat: 40.7128, lng: -74.006 },
-//     address: "123 Market St, New York, NY",
-//     contact: "+1 (555) 123-4567",
-//     products: ["Vegetables", "Fruits"],
-//     description: "Large wholesaler specializing in organic produce.",
-//   },
-//   {
-//     id: 2,
-//     name: "Farm Fresh Co-op",
-//     category: "cooperative",
-//     location: { lat: 40.72, lng: -73.995 },
-//     address: "456 Co-op Lane, Brooklyn, NY",
-//     contact: "+1 (555) 987-6543",
-//     products: ["Dairy", "Eggs", "Vegetables"],
-//     description: "Farmer-owned cooperative focusing on local distribution.",
-//   },
-//   {
-//     id: 3,
-//     name: "City Farmers Market",
-//     category: "market",
-//     location: { lat: 40.73, lng: -74.01 },
-//     address: "789 Market Ave, Jersey City, NJ",
-//     contact: "+1 (555) 456-7890",
-//     products: ["All produce", "Artisanal goods"],
-//     description: "Weekly farmers market with multiple vendor opportunities.",
-//   },
-//   {
-//     id: 4,
-//     name: "Restaurant Supply Inc",
-//     category: "restaurant",
-//     location: { lat: 40.718, lng: -73.99 },
-//     address: "321 Chef Blvd, Manhattan, NY",
-//     contact: "+1 (555) 234-5678",
-//     products: ["Premium produce", "Specialty items"],
-//     description: "Supplies high-end restaurants with farm-fresh ingredients.",
-//   },
-// ];
-
-// interface Product {
-//   _id: string;
-//   productName: string;
-// }
-
-// const limitOptions = [
-//   { value: "5", label: "Top 5" },
-//   { value: "10", label: "Top 10" },
-//   { value: "50", label: "Top 50" },
-//   { value: "100", label: "Top 100" },
-// ];
-
-// export default function FarmerMarketplace() {
-//   const [selectedProduct, setSelectedProduct] = useState<string>("");
-//   const [selectedBuyer, setSelectedBuyer] = useState<any>(null);
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-//   const [products, setProducts] = useState<Product[]>([]);
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState<string | null>(null);
-//   const [limit, setLimit] = useState<string>("5");
-
-//   useEffect(() => {
-//     const fetchProducts = async () => {
-//       try {
-//         setLoading(true);
-//         const response = await axios.get(
-//           `/api/product/allProduct?limit=${limit}`
-//         );
-//         setProducts(response.data.data);
-//         setError(null);
-//       } catch (err) {
-//         setError("Failed to fetch products");
-//         console.error("Error fetching products:", err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchProducts();
-//   }, [limit]);
-
-//   const filteredBuyers = selectedProduct
-//     ? BUYERS.filter((buyer) => buyer.products.includes(selectedProduct))
-//     : BUYERS;
-
-//   const handleBuyerClick = (buyer: any) => {
-//     setSelectedBuyer(buyer);
-//     setIsModalOpen(true);
-//   };
-
-//   const getProductName = (productId: string) => {
-//     const product = products.find((p) => p._id === productId);
-//     return product?.productName || "";
-//   };
-
-//   return (
-//     <main className="min-h-screen bg-gray-50">
-//       <div className="container mx-auto px-4 py-8">
-//         <h1 className="text-3xl font-bold mb-6">
-//           Find Buyers For Your Produce
-//         </h1>
-
-//         {/* Filter Section */}
-//         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-//           {/* <h2 className="text-xl font-semibold mb-4">Select Product</h2> */}
-//           <div className="flex flex-wrap gap-6 mb-4">
-//             <div className="flex-1 min-w-[240px]">
-//               {loading ? (
-//                 <div className="text-gray-500 mt-8">Loading products...</div>
-//               ) : error ? (
-//                 <div className="text-red-500 mt-8">{error}</div>
-//               ) : (
-//                 <div>
-//                   <label className="text-sm font-medium text-gray-700 mb-2 block">
-//                     Select a product
-//                   </label>
-//                   <Select
-//                     value={selectedProduct}
-//                     onValueChange={setSelectedProduct}
-//                   >
-//                     <SelectTrigger className="w-full">
-//                       <SelectValue placeholder="Select a product" />
-//                     </SelectTrigger>
-//                     <SelectContent>
-//                       {products.map((product) => (
-//                         <SelectItem key={product._id} value={product._id}>
-//                           {product.productName}
-//                         </SelectItem>
-//                       ))}
-//                     </SelectContent>
-//                   </Select>
-//                 </div>
-//               )}
-//             </div>
-//             <div className="flex-1 min-w-[240px]">
-//               <label
-//                 htmlFor="limit"
-//                 className="text-sm font-medium text-gray-700 mb-2 block"
-//               >
-//                 Number of Records
-//               </label>
-//               <Select value={limit} onValueChange={setLimit}>
-//                 <SelectTrigger className="w-full">
-//                   <SelectValue placeholder="Select limit" />
-//                 </SelectTrigger>
-//                 <SelectContent>
-//                   {limitOptions.map((option) => (
-//                     <SelectItem key={option.value} value={option.value}>
-//                       {option.label}
-//                     </SelectItem>
-//                   ))}
-//                 </SelectContent>
-//               </Select>
-//             </div>
-//           </div>
-
-//           <div className="bg-gray-50 rounded-md p-4 mt-4">
-//             <p className="text-sm text-gray-600">
-//               Select a product to see buyers interested in purchasing it.
-//             </p>
-//           </div>
-//         </div>
-
-//         {/* Map Section */}
-//         <div className="bg-white rounded-lg shadow-md p-6">
-//           <h2 className="text-xl font-semibold mb-4">Nearby Buyers</h2>
-//           {/* <div className="h-[500px] w-full rounded-lg overflow-hidden border border-gray-200">
-//             <BuyerMap buyers={filteredBuyers} onBuyerClick={handleBuyerClick} />
-//           </div> */}
-//           <div className="w-full mx-auto shadow-lg rounded-xl overflow-hidden border border-gray-200">
-//             <MapView
-//               locations={locations}
-//               userLocation={userLocation}
-//               defaultZoom={12}
-//             />
-//           </div>
-
-//           <p className="mt-4 text-sm text-gray-500">
-//             Click on a marker to view buyer details. Showing{" "}
-//             {filteredBuyers.length} buyers
-//             {selectedProduct
-//               ? ` interested in ${getProductName(selectedProduct)}`
-//               : ""}
-//             .
-//           </p>
-//         </div>
-//       </div>
-
-//       {/* Buyer Details Modal */}
-//       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-//         <DialogContent className="sm:max-w-md">
-//           {selectedBuyer && (
-//             <>
-//               <DialogHeader>
-//                 <DialogTitle>{selectedBuyer.name}</DialogTitle>
-//                 <DialogDescription>
-//                   {selectedBuyer.category.charAt(0).toUpperCase() +
-//                     selectedBuyer.category.slice(1)}
-//                 </DialogDescription>
-//               </DialogHeader>
-
-//               <div className="grid gap-4 py-4">
-//                 <div className="flex items-start gap-3">
-//                   <MapPin className="h-5 w-5 text-gray-500 mt-0.5" />
-//                   <div>
-//                     <h3 className="font-medium">Address</h3>
-//                     <p className="text-sm text-gray-500">
-//                       {selectedBuyer.address}
-//                     </p>
-//                   </div>
-//                 </div>
-
-//                 <div className="flex items-start gap-3">
-//                   <User className="h-5 w-5 text-gray-500 mt-0.5" />
-//                   <div>
-//                     <h3 className="font-medium">Contact</h3>
-//                     <p className="text-sm text-gray-500">
-//                       {selectedBuyer.contact}
-//                     </p>
-//                   </div>
-//                 </div>
-
-//                 <div>
-//                   <h3 className="font-medium mb-1">Products Interested In</h3>
-//                   <div className="flex flex-wrap gap-2">
-//                     {selectedBuyer.products.map((product: string) => (
-//                       <span
-//                         key={product}
-//                         className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full"
-//                       >
-//                         {product}
-//                       </span>
-//                     ))}
-//                   </div>
-//                 </div>
-
-//                 <div>
-//                   <h3 className="font-medium mb-1">Description</h3>
-//                   <p className="text-sm text-gray-600">
-//                     {selectedBuyer.description}
-//                   </p>
-//                 </div>
-//               </div>
-
-//               <div className="flex justify-end">
-//                 <Button onClick={() => setIsModalOpen(false)}>Close</Button>
-//               </div>
-//             </>
-//           )}
-//         </DialogContent>
-//       </Dialog>
-//     </main>
-//   );
-// }
-
 "use client";
 
 import { useState, useEffect } from "react";
 import { MapPin, User } from "lucide-react";
 import axios from "axios";
+import { useProfile } from "@/store/useProfile";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -319,6 +22,11 @@ import {
 } from "@/components/ui/select";
 
 import dynamic from "next/dynamic";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 const MapView = dynamic(() => import("@/components/farmer/MapView"), {
   ssr: false,
@@ -330,12 +38,18 @@ interface Product {
 }
 
 interface Buyer {
-  buyerId: string;
-  name: string;
+  buyer: {
+    category: string;
+    email: string;
+    id: string;
+    username: string;
+    phone: string;
+  };
   distance: number;
   location: {
     latitude: number;
     longitude: number;
+    title: string;
   };
 }
 
@@ -356,11 +70,18 @@ export default function FarmerMarketplace() {
   const [error, setError] = useState<string | null>(null);
   const [limit, setLimit] = useState<string>("5");
 
+  const { profile, isLoading: profileLoading } = useProfile();
+
+  const generateRandomPhone = () => {
+    const randomNumber = Math.floor(Math.random() * 9000000000) + 1000000000;
+    return `+91 ${randomNumber}`;
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`/api/product/allProduct?limit=${limit}`);
+        const response = await axios.get(`/api/product/allProduct`);
         setProducts(response.data.data);
         setError(null);
       } catch (err) {
@@ -372,27 +93,40 @@ export default function FarmerMarketplace() {
     };
 
     fetchProducts();
-  }, [limit]);
+  }, []);
+
+  const fetchNearbyBuyers = async () => {
+    try {
+      console.log(selectedProduct);
+      setLoading(true);
+      const response = await axios.post("/api/nearest/buyer", {
+        numberOfBuyers: parseInt(limit),
+        productId: selectedProduct,
+      });
+      // Add phone numbers to the buyers data
+      const buyersWithPhone = response.data.nearestBuyers.map(
+        (buyer: Buyer) => ({
+          ...buyer,
+          buyer: {
+            ...buyer.buyer,
+            phone: generateRandomPhone(),
+          },
+        })
+      );
+      setBuyers(buyersWithPhone);
+      console.log(buyersWithPhone);
+      setError(null);
+    } catch (err) {
+      setError("Failed to fetch nearby buyers");
+      console.error("Error fetching buyers:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchNearbyBuyers = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.post('/api/nearest/buyer', {
-          numberOfBuyers: parseInt(limit)
-        });
-        setBuyers(response.data.nearestBuyers);
-        setError(null);
-      } catch (err) {
-        setError("Failed to fetch nearby buyers");
-        console.error("Error fetching buyers:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchNearbyBuyers();
-  }, [limit]);
+  }, [limit, selectedProduct]);
 
   const handleBuyerClick = (buyer: Buyer) => {
     setSelectedBuyer(buyer);
@@ -405,10 +139,10 @@ export default function FarmerMarketplace() {
   };
 
   // Convert buyers to locations format for MapView
-  const buyerLocations = buyers.map(buyer => ({
+  const buyerLocations = buyers.map((buyer) => ({
     latitude: buyer.location.latitude,
     longitude: buyer.location.longitude,
-    name: buyer.name
+    name: buyer.location.title, // Using location title instead of buyer name
   }));
 
   return (
@@ -468,18 +202,43 @@ export default function FarmerMarketplace() {
             </div>
           </div>
 
+          {/* <div className="flex flex-wrap gap-6 mb-4">
+            <div className="flex-1 min-w-[240px]">
+              <label className="text-sm font-medium text-gray-700 mb-2 block">
+                Search by location
+              </label>
+              <Input placeholder="" />
+            </div>
+            <div className="flex-1 min-w-[240px]">
+              <label className="text-sm font-medium text-gray-700 mb-2 block">
+                Number of Buyers
+              </label>
+              
+              <Button className="">Find</Button>
+            </div>
+          </div>
+
           <div className="bg-gray-50 rounded-md p-4 mt-4">
             <p className="text-sm text-gray-600">
               Showing {buyers.length} nearby buyers in your area.
             </p>
-          </div>
+          </div> */}
         </div>
 
         {/* Map Section */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold mb-4">Nearby Buyers</h2>
-          <div className="w-full mx-auto shadow-lg rounded-xl overflow-hidden border border-gray-200">
+          <div className="flex items-center justify-between mb-2 pr-6">
+            <h2 className="text-xl font-semibold mb-4">Nearby Buyers</h2>
+            <div className="flex items-center">
+              <p className="mr-2">Your Location</p>
+              <img src="/images/blue-pin.png" alt="" className="w-5 mr-6" />
+              <p className="mr-2">Buyers Location</p>
+              <img src="/images/red-pin.png" alt="" className="w-5" />
+            </div>
+          </div>
+          <div className="w-full mx-auto shadow-lg rounded-xl overflow-hidden border border-gray-200 -z-10">
             <MapView
+              userLocation={profile?.location}
               locations={buyerLocations}
               defaultZoom={12}
             />
@@ -487,26 +246,57 @@ export default function FarmerMarketplace() {
 
           {/* Buyers List */}
           <div className="mt-6">
-            <h3 className="text-lg font-semibold mb-4">Buyer Details</h3>
+            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              Buyer Details
+              <Badge className="bg-green-100 text-green-800 hover:bg-green-200">
+                {buyers.length} buyers found
+              </Badge>
+            </h3>
             <div className="grid gap-4">
               {buyers.map((buyer) => (
-                <div
-                  key={buyer.buyerId}
-                  className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer"
+                <Card
+                  key={buyer.buyer.id}
+                  className="p-4 transition-all duration-300 hover:shadow-lg hover:border-green-200 cursor-pointer bg-white/60 backdrop-blur-sm"
                   onClick={() => handleBuyerClick(buyer)}
                 >
                   <div className="flex justify-between items-start">
-                    <div>
-                      <h4 className="font-medium">{buyer.name}</h4>
-                      <p className="text-sm text-gray-500">
-                        Distance: {buyer.distance.toFixed(2)} km
-                      </p>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <div className="h-10 w-10 rounded-full bg-green-50 flex items-center justify-center border border-green-100">
+                          <User className="h-5 w-5 text-green-600" />
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-gray-800">
+                            {buyer.buyer.username}
+                          </h4>
+                          <p className="text-sm text-green-700 font-medium">
+                            {buyer.buyer.category}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4 text-sm text-gray-600">
+                        <div className="flex items-center gap-1">
+                          <MapPin className="h-4 w-4 text-green-600" />
+                          <span>{buyer.distance.toFixed(2)} km</span>
+                        </div>
+                        <Separator
+                          orientation="vertical"
+                          className="h-4 bg-green-200"
+                        />
+                        <span className="truncate max-w-[200px]">
+                          {buyer.location.title}
+                        </span>
+                      </div>
                     </div>
-                    <Button variant="outline" size="sm">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="hover:bg-green-50 hover:text-green-700 hover:border-green-200 transition-colors"
+                    >
                       View Details
                     </Button>
                   </div>
-                </div>
+                </Card>
               ))}
             </div>
           </div>
@@ -515,32 +305,91 @@ export default function FarmerMarketplace() {
 
       {/* Buyer Details Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-lg bg-white/95 backdrop-blur-sm">
           {selectedBuyer && (
             <>
               <DialogHeader>
-                <DialogTitle>{selectedBuyer.name}</DialogTitle>
-                <DialogDescription>
-                  Distance: {selectedBuyer.distance.toFixed(2)} km away
-                </DialogDescription>
-              </DialogHeader>
-
-              <div className="grid gap-4 py-4">
-                <div className="flex items-start gap-3">
-                  <MapPin className="h-5 w-5 text-gray-500 mt-0.5" />
+                <div className="flex items-center gap-3">
+                  <div className="h-12 w-12 rounded-full bg-green-50 flex items-center justify-center border border-green-100">
+                    <User className="h-6 w-6 text-green-600" />
+                  </div>
                   <div>
-                    <h3 className="font-medium">Location</h3>
-                    <p className="text-sm text-gray-500">
-                      Latitude: {selectedBuyer.location.latitude}
-                      <br />
-                      Longitude: {selectedBuyer.location.longitude}
-                    </p>
+                    <DialogTitle className="text-xl text-gray-800">
+                      {selectedBuyer.buyer.username}
+                    </DialogTitle>
+                    <DialogDescription className="flex items-center gap-2">
+                      <Badge className="bg-green-100 text-green-800 hover:bg-green-200">
+                        {selectedBuyer.buyer.category}
+                      </Badge>
+                      <span className="text-green-600">•</span>
+                      <span className="text-gray-600">
+                        {selectedBuyer.distance.toFixed(2)} km away
+                      </span>
+                    </DialogDescription>
                   </div>
                 </div>
+              </DialogHeader>
+
+              <Separator className="bg-green-100" />
+
+              <div className="grid gap-6 py-4">
+                <Card className="p-4 bg-green-50/50 border-green-100">
+                  <div className="flex items-start gap-3">
+                    <User className="h-5 w-5 text-green-600 mt-0.5" />
+                    <div className="space-y-1.5">
+                      <h3 className="font-medium text-gray-800">
+                        Contact Information
+                      </h3>
+                      <div className="text-sm space-y-1">
+                        <p className="flex items-center gap-2 text-gray-600">
+                          Email:
+                          <span className="text-gray-800">
+                            {selectedBuyer.buyer.email}
+                          </span>
+                        </p>
+                        <p className="flex items-center gap-2 text-gray-600">
+                          Phone:
+                          <span className="text-gray-800">
+                            {selectedBuyer.buyer.phone}
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-4 bg-green-50/50 border-green-100">
+                  <div className="flex items-start gap-3">
+                    <MapPin className="h-5 w-5 text-green-600 mt-0.5" />
+                    <div className="space-y-1.5">
+                      <h3 className="font-medium text-gray-800">
+                        Location Details
+                      </h3>
+                      <div className="text-sm space-y-1">
+                        <p className="text-gray-600">
+                          {selectedBuyer.location.title}
+                        </p>
+                        <div className="flex gap-4 text-gray-600">
+                          <span>Lat: {selectedBuyer.location.latitude}</span>
+                          <span>Long: {selectedBuyer.location.longitude}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
               </div>
 
-              <div className="flex justify-end">
-                <Button onClick={() => setIsModalOpen(false)}>Close</Button>
+              <div className="flex justify-end gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsModalOpen(false)}
+                  className="hover:bg-green-50 hover:text-green-700 hover:border-green-200"
+                >
+                  Close
+                </Button>
+                <Button className="bg-green-600 hover:bg-green-700 text-white">
+                  Request Buy for visit
+                </Button>
               </div>
             </>
           )}

@@ -1,17 +1,19 @@
-import React from 'react'
+import React from "react";
 
 const page = () => {
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-6 w-full mx-auto">
       <h1 className="text-2xl font-bold mb-6">Settings</h1>
-      
+
       <div className="space-y-6">
         {/* Account Settings */}
         <section className="bg-white p-6 rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-4">Account Settings</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Profile Picture</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Profile Picture
+              </label>
               <div className="mt-1 flex items-center space-x-4">
                 <div className="h-16 w-16 rounded-full bg-gray-200"></div>
                 <button className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
@@ -20,7 +22,9 @@ const page = () => {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Name</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Name
+              </label>
               <input
                 type="text"
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
@@ -28,7 +32,9 @@ const page = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Phone Number</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Phone Number
+              </label>
               <input
                 type="tel"
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
@@ -45,7 +51,9 @@ const page = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="font-medium">Price Alerts</h3>
-                <p className="text-sm text-gray-500">Get notified when prices change</p>
+                <p className="text-sm text-gray-500">
+                  Get notified when prices change
+                </p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" className="sr-only peer" />
@@ -55,7 +63,9 @@ const page = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="font-medium">New Orders</h3>
-                <p className="text-sm text-gray-500">Get notified for new orders</p>
+                <p className="text-sm text-gray-500">
+                  Get notified for new orders
+                </p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" className="sr-only peer" />
@@ -70,7 +80,9 @@ const page = () => {
           <h2 className="text-xl font-semibold mb-4">Language and Region</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Language</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Language
+              </label>
               <select className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2">
                 <option>English</option>
                 <option>Hindi</option>
@@ -78,7 +90,9 @@ const page = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Region</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Region
+              </label>
               <select className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2">
                 <option>North India</option>
                 <option>South India</option>
@@ -98,7 +112,7 @@ const page = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

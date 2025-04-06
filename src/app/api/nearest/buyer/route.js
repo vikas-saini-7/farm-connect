@@ -9,7 +9,6 @@ connectDB();
 
 // Distance calculator (Haversine formula)
 function getDistance(lat1, lon1, lat2, lon2) {
-  console.log(lat1, lon1, lat2, lon2);
   const R = 6371; // Radius of Earth in kilometers
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
   const dLon = ((lon2 - lon1) * Math.PI) / 180;
@@ -24,6 +23,67 @@ function getDistance(lat1, lon1, lat2, lon2) {
   return R * c; // Distance in kilometers
 }
 
+
+// export async function POST(req) {
+//   try {
+//     const session = await getServerSession(authOptions);
+
+//     if (!session) {
+//       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+//     }
+
+//     const sellerId = session.user.id;
+//     const { numberOfBuyers = 5, productId } = await req.json();
+
+//     // Fetch seller's location
+//     const seller = await User.findById(sellerId);
+//     if (!seller || !seller.location) {
+//       return NextResponse.json({ error: "Seller location not found" }, { status: 404 });
+//     }
+
+//     const { latitude: sellerLat, longitude: sellerLon } = seller.location;
+
+//     // Build the query based on whether productId is provided
+//     let query = { role: "Buyer", location: { $exists: true } };
+
+//     if (productId) {
+//       // If productId is provided, fetch product and filter by category
+//       const product = await Product.findById(productId);
+//       if (product) {
+//         query.category = product.category;
+//       }
+//     }
+
+//     console.log("Query:", query);
+
+//     // Find buyers based on the query
+//     const buyers = await User.find(query);
+
+//     const buyersWithDistance = buyers
+//       .map((buyer) => {
+//         const { latitude, longitude } = buyer.location || {};
+//         if (latitude == null || longitude == null) return null;
+
+//         const distance = getDistance(sellerLat, sellerLon, latitude, longitude);
+//         return {
+//           buyerId: buyer._id,
+//           name: buyer.username,
+//           category: buyer.category,
+//           distance,
+//           location: buyer.location,
+//         };
+//       })
+//       .filter(Boolean)
+//       .sort((a, b) => a.distance - b.distance)
+//       .slice(0, numberOfBuyers);
+
+//     return NextResponse.json({ nearestBuyers: buyersWithDistance }, { status: 200 });
+//   } catch (error) {
+//     console.error("Error finding nearest buyers:", error);
+//     return NextResponse.json({ error: error.message }, { status: 500 });
+//   }
+// }
+
 export async function POST(req) {
   try {
     const session = await getServerSession(authOptions);
@@ -33,7 +93,7 @@ export async function POST(req) {
     }
 
     const sellerId = session.user.id;
-    const { numberOfBuyers = 5 } = await req.json();
+    const { numberOfBuyers = 5, productId } = await req.json();
 
     // Fetch seller's location
     const seller = await User.findById(sellerId);
@@ -43,8 +103,19 @@ export async function POST(req) {
 
     const { latitude: sellerLat, longitude: sellerLon } = seller.location;
 
-    // Find all buyers with location
-    const buyers = await User.find({ role: "buyer", location: { $exists: true } });
+    // Build the query based on whether productId is provided
+    let query = { role: "Buyer", location: { $exists: true } };
+
+    if (productId) {
+      const product = await Product.findById(productId);
+      if (product) {
+        query.category = product.category;
+      }
+    }
+
+    // Find buyers and populate relevant fields
+    const buyers = await User.find(query)
+      .select('username email phone location category image'); // Select only needed fields
 
     const buyersWithDistance = buyers
       .map((buyer) => {
@@ -52,10 +123,15 @@ export async function POST(req) {
         if (latitude == null || longitude == null) return null;
 
         const distance = getDistance(sellerLat, sellerLon, latitude, longitude);
-        console.log("Distance:", distance);
         return {
-          buyerId: buyer._id,
-          name: buyer.username,
+          buyer: {
+            id: buyer._id,
+            username: buyer.username,
+            email: buyer.email,
+            phone: buyer.phone,
+            image: buyer.image,
+            category: buyer.category
+          },
           distance,
           location: buyer.location,
         };
