@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "../../../../lib/connectDB";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/route";
+import { authOptions } from "../../auth/[...nextauth]/auth";
 import User from "../../../../model/userSchema";
 import Review from "../../../../model/reviewSchema";
 
