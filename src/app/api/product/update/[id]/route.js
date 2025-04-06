@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/connectDB";
-import Product from "@/models/Product";
-import { getUserIdFromSession } from "@/utils/getUserId"; // helper function you created
+import Product from "../../../../../model/productSchema";
+import { getUserIdFromSession } from "@/lib/getUserId"; // helper function you created
 
 // PUT - Update product
 export async function PUT(req, { params }) {

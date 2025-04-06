@@ -22,8 +22,8 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const farmer = false; // "farmer" | "buyer"
+import { useEffect, useState } from "react";
+import { useProfile } from "@/store/useProfile";
 
 const farmerNav = [
   {
@@ -31,11 +31,11 @@ const farmerNav = [
     url: "/dashboard",
     icon: Home,
   },
-  {
-    title: "Manage Products",
-    url: "/dashboard/products",
-    icon: ShoppingBag,
-  },
+  // {
+  //   title: "Manage Products",
+  //   url: "/dashboard/products",
+  //   icon: ShoppingBag,
+  // },
   {
     title: "Find Buyer",
     url: "/dashboard/find-buyer",
@@ -51,11 +51,11 @@ const farmerNav = [
     url: "/dashboard/weather",
     icon: Leaf,
   },
-  {
-    title: "Wallet",
-    url: "/dashboard/wallet",
-    icon: Leaf,
-  },
+  // {
+  //   title: "Wallet",
+  //   url: "/dashboard/wallet",
+  //   icon: Leaf,
+  // },
   {
     title: "Get Contacts",
     url: "/dashboard/contact",
@@ -84,6 +84,11 @@ const buyerNav = [
   //   url: "/dashboard/products",
   //   icon: Home,
   // },
+  {
+    title: "Manage Requests",
+    url: "/dashboard/manage-requests",
+    icon: Home,
+  },
   {
     title: "Find Farmer",
     url: "/dashboard/find-farmer",
@@ -119,6 +124,8 @@ const buyerNav = [
 export function AppSidebar() {
   const pathname = usePathname();
 
+  const profile = useProfile((state) => state.profile);
+
   return (
     <Sidebar className="bg-white/10 backdrop-blur-md border-r border-gray-100 dark:border-gray-800 w-64">
       <SidebarContent>
@@ -131,7 +138,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {farmer ? (
+              {profile?.role === "Seller" ? (
                 <>
                   {farmerNav.map((item) => {
                     const isActive = pathname === item.url;
