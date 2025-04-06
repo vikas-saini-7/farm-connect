@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Your App Name",
-  description: "Your app description",
+  title: "Farm Connect",
+  description: "Revolutionizing...",
 };
 
 export default function RootLayout({

@@ -31,11 +31,11 @@ const farmerNav = [
     url: "/dashboard",
     icon: Home,
   },
-  // {
-  //   title: "Manage Products",
-  //   url: "/dashboard/products",
-  //   icon: ShoppingBag,
-  // },
+  {
+    title: "Manage Products",
+    url: "/dashboard/products",
+    icon: ShoppingBag,
+  },
   {
     title: "Find Buyer",
     url: "/dashboard/find-buyer",

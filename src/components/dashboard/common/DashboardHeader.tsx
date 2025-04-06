@@ -64,7 +64,7 @@ const DashboardHeader = () => {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {profile?.role === "farmer" ? (
+              {profile?.role === "Seller" ? (
                 <div className="max-h-[300px] overflow-y-auto">
                   <DropdownMenuItem className="flex items-center gap-4 p-4">
                     <div className="flex-shrink-0 w-2 h-2 rounded-full bg-blue-500" />
