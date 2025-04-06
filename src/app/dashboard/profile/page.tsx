@@ -242,7 +242,7 @@ const ProfilePage = () => {
           <div className="flex flex-col md:flex-row items-start gap-8">
             <Avatar className="h-32 w-32 border-4 border-white">
               <AvatarImage src="/placeholder-avatar.jpg" />
-              <AvatarFallback className="text-2xl">
+              <AvatarFallback className="text-2xl uppercase">
                 {profile.username
                   .split(" ")
                   .map((n) => n[0])
@@ -253,10 +253,10 @@ const ProfilePage = () => {
               <div className="flex flex-col md:flex-row md:items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    <h1 className="text-3xl font-bold text-gray-900">
+                    <h1 className="text-3xl font-bold text-gray-900 capitalize">
                       {profile.username}
                     </h1>
-                    {profile.isOnboarded && (
+                    {profile?.certificate && (
                       <div className="relative group">
                         <CheckCircle className="h-6 w-6 text-green-500" />
                         <div className="absolute bottom-full mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 whitespace-nowrap">

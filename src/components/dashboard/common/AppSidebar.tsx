@@ -31,11 +31,11 @@ const farmerNav = [
     url: "/dashboard",
     icon: Home,
   },
-  {
-    title: "Manage Products",
-    url: "/dashboard/products",
-    icon: ShoppingBag,
-  },
+  // {
+  //   title: "Manage Products",
+  //   url: "/dashboard/products",
+  //   icon: ShoppingBag,
+  // },
   {
     title: "Find Buyer",
     url: "/dashboard/find-buyer",
@@ -84,6 +84,11 @@ const buyerNav = [
   //   url: "/dashboard/products",
   //   icon: Home,
   // },
+  {
+    title: "Manage Requests",
+    url: "/dashboard/manage-requests",
+    icon: Home,
+  },
   {
     title: "Find Farmer",
     url: "/dashboard/find-farmer",
