@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { MapPin, User } from "lucide-react";
 import axios from "axios";
 import { useProfile } from "@/store/useProfile";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -20,10 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import dynamic from "next/dynamic";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -32,9 +28,10 @@ const MapView = dynamic(() => import("@/components/farmer/MapView"), {
   ssr: false,
 });
 
-interface Product {
-  _id: string;
-  productName: string;
+interface Location {
+  latitude: number;
+  longitude: number;
+  title: string;
 }
 
 interface Buyer {
@@ -46,11 +43,7 @@ interface Buyer {
     phone: string;
   };
   distance: number;
-  location: {
-    latitude: number;
-    longitude: number;
-    title: string;
-  };
+  location: Location;
 }
 
 const limitOptions = [
@@ -60,11 +53,19 @@ const limitOptions = [
   { value: "100", label: "Top 100" },
 ];
 
+const categoryOptions = [
+  { value: "Fruits", label: "Fruits" },
+  { value: "Vegetables", label: "Vegetables" },
+  { value: "Grains", label: "Grains" },
+  { value: "Dairy", label: "Dairy" },
+  { value: "Livestock", label: "Livestock" },
+  { value: "Others", label: "Others" },
+];
+
 export default function FarmerMarketplace() {
-  const [selectedProduct, setSelectedProduct] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedBuyer, setSelectedBuyer] = useState<Buyer | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [products, setProducts] = useState<Product[]>([]);
   const [buyers, setBuyers] = useState<Buyer[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -77,34 +78,15 @@ export default function FarmerMarketplace() {
     return `+91 ${randomNumber}`;
   };
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`/api/product/allProduct`);
-        setProducts(response.data.data);
-        setError(null);
-      } catch (err) {
-        setError("Failed to fetch products");
-        console.error("Error fetching products:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
   const fetchNearbyBuyers = async () => {
     try {
-      console.log(selectedProduct);
       setLoading(true);
-      const response = await axios.post("/api/nearest/buyer", {
-        numberOfBuyers: parseInt(limit),
-        productId: selectedProduct,
+      const response = await axios.post("/api/nearest/seller", {
+        numberOfSellers: parseInt(limit),
+        category: selectedCategory,
       });
-      // Add phone numbers to the buyers data
-      const buyersWithPhone = response.data.nearestBuyers.map(
+
+      const buyersWithPhone = response.data.nearestSellers.map(
         (buyer: Buyer) => ({
           ...buyer,
           buyer: {
@@ -114,7 +96,6 @@ export default function FarmerMarketplace() {
         })
       );
       setBuyers(buyersWithPhone);
-      console.log(buyersWithPhone);
       setError(null);
     } catch (err) {
       setError("Failed to fetch nearby buyers");
@@ -125,67 +106,53 @@ export default function FarmerMarketplace() {
   };
 
   useEffect(() => {
-    fetchNearbyBuyers();
-  }, [limit, selectedProduct]);
+    if (selectedCategory) {
+      fetchNearbyBuyers();
+    }
+  }, [limit, selectedCategory]);
 
   const handleBuyerClick = (buyer: Buyer) => {
     setSelectedBuyer(buyer);
     setIsModalOpen(true);
   };
 
-  const getProductName = (productId: string) => {
-    const product = products.find((p) => p._id === productId);
-    return product?.productName || "";
-  };
-
-  // Convert buyers to locations format for MapView
   const buyerLocations = buyers.map((buyer) => ({
     latitude: buyer.location.latitude,
     longitude: buyer.location.longitude,
-    name: buyer.location.title, // Using location title instead of buyer name
+    name: buyer.location.title,
   }));
 
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">
-          Find Buyers For Your Produce
-        </h1>
+        <h1 className="text-3xl font-bold mb-6">Find Farmers Easily</h1>
 
         {/* Filter Section */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <div className="flex flex-wrap gap-6 mb-4">
             <div className="flex-1 min-w-[240px]">
-              {loading ? (
-                <div className="text-gray-500 mt-8">Loading products...</div>
-              ) : error ? (
-                <div className="text-red-500 mt-8">{error}</div>
-              ) : (
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">
-                    Select a product
-                  </label>
-                  <Select
-                    value={selectedProduct}
-                    onValueChange={setSelectedProduct}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select a product" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {products.map((product) => (
-                        <SelectItem key={product._id} value={product._id}>
-                          {product.productName}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
+              <label className="text-sm font-medium text-gray-700 mb-2 block">
+                Select category
+              </label>
+              <Select
+                value={selectedCategory}
+                onValueChange={setSelectedCategory}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categoryOptions.map((category) => (
+                    <SelectItem key={category.value} value={category.value}>
+                      {category.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="flex-1 min-w-[240px]">
               <label className="text-sm font-medium text-gray-700 mb-2 block">
-                Number of Buyers
+                Number of Farmers
               </label>
               <Select value={limit} onValueChange={setLimit}>
                 <SelectTrigger className="w-full">
@@ -201,38 +168,16 @@ export default function FarmerMarketplace() {
               </Select>
             </div>
           </div>
-
-          {/* <div className="flex flex-wrap gap-6 mb-4">
-            <div className="flex-1 min-w-[240px]">
-              <label className="text-sm font-medium text-gray-700 mb-2 block">
-                Search by location
-              </label>
-              <Input placeholder="" />
-            </div>
-            <div className="flex-1 min-w-[240px]">
-              <label className="text-sm font-medium text-gray-700 mb-2 block">
-                Number of Buyers
-              </label>
-              
-              <Button className="">Find</Button>
-            </div>
-          </div>
-
-          <div className="bg-gray-50 rounded-md p-4 mt-4">
-            <p className="text-sm text-gray-600">
-              Showing {buyers.length} nearby buyers in your area.
-            </p>
-          </div> */}
         </div>
 
         {/* Map Section */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="flex items-center justify-between mb-2 pr-6">
-            <h2 className="text-xl font-semibold mb-4">Nearby Buyers</h2>
+            <h2 className="text-xl font-semibold mb-4">Nearby Farmers</h2>
             <div className="flex items-center">
               <p className="mr-2">Your Location</p>
               <img src="/images/blue-pin.png" alt="" className="w-5 mr-6" />
-              <p className="mr-2">Buyers Location</p>
+              <p className="mr-2">Farmers Location</p>
               <img src="/images/red-pin.png" alt="" className="w-5" />
             </div>
           </div>
@@ -387,9 +332,9 @@ export default function FarmerMarketplace() {
                 >
                   Close
                 </Button>
-                <Button className="bg-green-600 hover:bg-green-700 text-white">
+                {/* <Button className="bg-green-600 hover:bg-green-700 text-white">
                   Request Buy for visit
-                </Button>
+                </Button> */}
               </div>
             </>
           )}

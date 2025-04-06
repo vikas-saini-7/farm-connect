@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useProfile } from "@/store/useProfile";
+import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 const DashboardHeader = () => {
   // const [isDark, setIsDark] = useState(false);
@@ -57,29 +59,89 @@ const DashboardHeader = () => {
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium">Notifications</p>
                   <p className="text-xs text-muted-foreground">
-                    You have 3 unread messages
+                    You have 3 buyer interests
                   </p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <div className="max-h-[300px] overflow-y-auto">
-                {[1, 2, 3].map((_, i) => (
-                  <DropdownMenuItem
-                    key={i}
-                    className="flex items-center gap-4 p-4"
-                  >
+              {profile?.role === "farmer" ? (
+                <div className="max-h-[300px] overflow-y-auto">
+                  <DropdownMenuItem className="flex items-center gap-4 p-4">
                     <div className="flex-shrink-0 w-2 h-2 rounded-full bg-blue-500" />
                     <div className="flex flex-col gap-1">
                       <p className="text-sm font-medium">
-                        New message from John Doe
+                        Ramesh Patel is interested in your Wheat
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        2 minutes ago
+                        15 minutes ago
                       </p>
                     </div>
                   </DropdownMenuItem>
-                ))}
-              </div>
+
+                  <DropdownMenuItem className="flex items-center gap-4 p-4">
+                    <div className="flex-shrink-0 w-2 h-2 rounded-full bg-blue-500" />
+                    <div className="flex flex-col gap-1">
+                      <p className="text-sm font-medium">
+                        Mahesh Singh is interested in your Strawberry
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        2 hours ago
+                      </p>
+                    </div>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem className="flex items-center gap-4 p-4">
+                    <div className="flex-shrink-0 w-2 h-2 rounded-full bg-blue-500" />
+                    <div className="flex flex-col gap-1">
+                      <p className="text-sm font-medium">
+                        Suresh Yadav is interested in your Orange
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        5 hours ago
+                      </p>
+                    </div>
+                  </DropdownMenuItem>
+                </div>
+              ) : (
+                <div className="max-h-[300px] overflow-y-auto">
+                  {/* <DropdownMenuItem className="flex items-center gap-4 p-4">
+                    <div className="flex-shrink-0 w-2 h-2 rounded-full bg-blue-500" />
+                    <div className="flex flex-col gap-1">
+                      <p className="text-sm font-medium">
+                        Ramesh Patel is interested in your Wheat
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        15 minutes ago
+                      </p>
+                    </div>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem className="flex items-center gap-4 p-4">
+                    <div className="flex-shrink-0 w-2 h-2 rounded-full bg-blue-500" />
+                    <div className="flex flex-col gap-1">
+                      <p className="text-sm font-medium">
+                        Mahesh Singh is interested in your Strawberry
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        2 hours ago
+                      </p>
+                    </div>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem className="flex items-center gap-4 p-4">
+                    <div className="flex-shrink-0 w-2 h-2 rounded-full bg-blue-500" />
+                    <div className="flex flex-col gap-1">
+                      <p className="text-sm font-medium">
+                        Suresh Yadav is interested in your Orange
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        5 hours ago
+                      </p>
+                    </div>
+                  </DropdownMenuItem> */}
+                  Seller Requests here
+                </div>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -93,8 +155,12 @@ const DashboardHeader = () => {
                 </>
               ) : (
                 <>
-                  <p className="text-sm font-medium">{profile?.username}</p>
-                  <p className="text-xs text-muted-foreground">Premium Farmer</p>
+                  <p className="text-sm font-medium capitalize">
+                    {profile?.username}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {profile?.role}
+                  </p>
                 </>
               )}
             </div>
@@ -106,7 +172,9 @@ const DashboardHeader = () => {
                   ) : (
                     <>
                       <AvatarImage src="https://github.com/shadcn.png" />
-                      <AvatarFallback className="bg-primary/5">JD</AvatarFallback>
+                      <AvatarFallback className="bg-primary/5 uppercase">
+                        JD
+                      </AvatarFallback>
                     </>
                   )}
                 </Avatar>
@@ -121,7 +189,7 @@ const DashboardHeader = () => {
                       </>
                     ) : (
                       <>
-                        <p className="text-sm font-medium">johndoe@example.com</p>
+                        <p className="text-sm font-medium">{profile?.email}</p>
                         <p className="text-xs text-muted-foreground">
                           Manage your account
                         </p>
@@ -130,14 +198,21 @@ const DashboardHeader = () => {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="gap-3">
-                  <span>Profile</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="gap-3">
-                  <span>Settings</span>
-                </DropdownMenuItem>
+                <Link href="/dashboard/profile">
+                  <DropdownMenuItem className="gap-3">
+                    <span>Profile</span>
+                  </DropdownMenuItem>
+                </Link>
+                <Link href="/dashboard/settings">
+                  <DropdownMenuItem className="gap-3">
+                    <span>Settings</span>
+                  </DropdownMenuItem>
+                </Link>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="gap-3 text-red-500">
+                <DropdownMenuItem
+                  className="gap-3 text-red-500"
+                  onClick={() => signOut()}
+                >
                   <span>Logout</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
