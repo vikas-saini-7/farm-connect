@@ -44,44 +44,63 @@ const DashboardHeader = () => {
 
           {/* Notification Dropdown */}
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-medium text-white flex items-center justify-center">
-                  3
-                </span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-80">
-              <DropdownMenuLabel className="font-normal">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium">Notifications</p>
-                  <p className="text-xs text-muted-foreground">
-                    You have 3 unread messages
-                  </p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <div className="max-h-[300px] overflow-y-auto">
-                {[1, 2, 3].map((_, i) => (
-                  <DropdownMenuItem
-                    key={i}
-                    className="flex items-center gap-4 p-4"
-                  >
-                    <div className="flex-shrink-0 w-2 h-2 rounded-full bg-blue-500" />
-                    <div className="flex flex-col gap-1">
-                      <p className="text-sm font-medium">
-                        New message from John Doe
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        2 minutes ago
-                      </p>
-                    </div>
-                  </DropdownMenuItem>
-                ))}
-              </div>
-            </DropdownMenuContent>
-          </DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <Button variant="ghost" size="icon" className="relative">
+      <Bell className="h-5 w-5" />
+      <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-medium text-white flex items-center justify-center">
+        3
+      </span>
+    </Button>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent align="end" className="w-80">
+    <DropdownMenuLabel className="font-normal">
+      <div className="flex flex-col space-y-1">
+        <p className="text-sm font-medium">Notifications</p>
+        <p className="text-xs text-muted-foreground">
+          You have 3 buyer interests
+        </p>
+      </div>
+    </DropdownMenuLabel>
+    <DropdownMenuSeparator />
+    <div className="max-h-[300px] overflow-y-auto">
+      <DropdownMenuItem className="flex items-center gap-4 p-4">
+        <div className="flex-shrink-0 w-2 h-2 rounded-full bg-blue-500" />
+        <div className="flex flex-col gap-1">
+          <p className="text-sm font-medium">
+            Ramesh Patel is interested in your Wheat
+          </p>
+          <p className="text-xs text-muted-foreground">
+            15 minutes ago
+          </p>
+        </div>
+      </DropdownMenuItem>
+      
+      <DropdownMenuItem className="flex items-center gap-4 p-4">
+        <div className="flex-shrink-0 w-2 h-2 rounded-full bg-blue-500" />
+        <div className="flex flex-col gap-1">
+          <p className="text-sm font-medium">
+            Mahesh Singh is interested in your Strawberry
+          </p>
+          <p className="text-xs text-muted-foreground">
+            2 hours ago
+          </p>
+        </div>
+      </DropdownMenuItem>
+      
+      <DropdownMenuItem className="flex items-center gap-4 p-4">
+        <div className="flex-shrink-0 w-2 h-2 rounded-full bg-blue-500" />
+        <div className="flex flex-col gap-1">
+          <p className="text-sm font-medium">
+            Suresh Yadav is interested in your Orange
+          </p>
+          <p className="text-xs text-muted-foreground">
+            5 hours ago
+          </p>
+        </div>
+      </DropdownMenuItem>
+    </div>
+  </DropdownMenuContent>
+</DropdownMenu>
 
           {/* User Info and Avatar Dropdown */}
           <div className="flex items-center gap-4">
