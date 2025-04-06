@@ -289,7 +289,7 @@ const ProductsPage = () => {
                 <TableCell className="font-medium">{product.productName}</TableCell>
                 <TableCell>{product.category}</TableCell>
                 <TableCell>Rs. {product.price.toFixed(2)}</TableCell>
-                <TableCell>{product.quantity}</TableCell>
+                <TableCell>{product.quantity} acre</TableCell>
                 {/* <TableCell>
                   <span className={`px-2 py-1 rounded-full text-xs ${
                     product.status === "available"
