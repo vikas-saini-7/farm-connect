@@ -1,20 +1,20 @@
-"use client"
+'use client'
 
 import Image from "next/image"
 import { motion } from "framer-motion"
 
 const experts = [
-  { name: "Dr. Mehta", field: "Organic Farming", contact: "+91 98765 12345", img: "/images/expert1.jpg" },
-  { name: "Prof. Iyer", field: "Smart Irrigation", contact: "+91 93456 78901", img: "/images/expert2.jpg" },
-  { name: "Ms. Rekha", field: "Crop Planning", contact: "+91 99887 11223", img: "/images/expert3.jpg" },
-  { name: "Mr. Arjun", field: "Soil Health", contact: "+91 90909 80808", img: "/images/expert4.jpg" },
+  { name: "Dr. Mehta", field: "Organic Farming", contact: "+91 98765 12345", img: "/expert1.jpg" },
+  { name: "Prof. Iyer", field: "Smart Irrigation", contact: "+91 93456 78901", img: "/expert2.jpg" },
+  { name: "Ms. Rekha", field: "Crop Planning", contact: "+91 99887 11223", img: "/expert3.jpg" },
+  { name: "Mr. Arjun", field: "Soil Health", contact: "+91 90909 80808", img: "/arjun.jpg" },
 ]
 
 const farmerStories = [
-  { img: "/images/farmer1.jpg", name: "Ramesh", tip: "Organic wheat improved my yield by 30%." },
-  { img: "/images/farmer2.jpg", name: "Seema", tip: "Dragon fruit gave me good income in 6 months." },
-  { img: "/images/farmer3.jpg", name: "Lalita", tip: "Solar pumps reduced water costs drastically." },
-  { img: "/images/farmer4.jpg", name: "Manoj", tip: "Broccoli exports helped expand my market." },
+  { img: "/farmer1.jpg", name: "Ramesh", tip: "Organic wheat improved my yield by 30%." },
+  { img: "/farmer2.jpg", name: "Samir", tip: "Dragon fruit gave me good income in 6 months." },
+  { img: "/farmer3.jpg", name: "Lalita", tip: "Solar pumps reduced water costs drastically." },
+  { img: "/farmer4.jpg", name: "Manoj", tip: "Broccoli exports helped expand my market." },
 ]
 
 const doctors = [
@@ -25,10 +25,10 @@ const doctors = [
 ]
 
 const modernCrops = [
-  { img: "/images/broccoli.jpg", name: "Broccoli", tip: "Cool-season crop, high market demand." },
-  { img: "/images/dragonfruit.jpg", name: "Dragon Fruit", tip: "Low maintenance, high return." },
-  { img: "/images/lettuce.jpg", name: "Lettuce", tip: "Fast-growing, popular in urban markets." },
-  { img: "/images/zucchini.jpg", name: "Zucchini", tip: "Great for greenhouse farming." },
+  { img: "/brocally.jpg", name: "brocally", tip: "Cool-season crop, high market demand." },
+  { img: "/dragonfruit.jpg", name: "Dragon Fruit", tip: "Low maintenance, high return." },
+  { img: "/lettuce.jpg", name: "Lettuce", tip: "Fast-growing, popular in urban markets." },
+  { img: "/zucchini.jpeg", name: "Zucchini", tip: "Great for greenhouse farming." },
 ]
 
 export default function ContactPage() {
@@ -46,13 +46,22 @@ export default function ContactPage() {
       <motion.section className="bg-green-100 p-4 rounded-xl shadow" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <h2 className="text-2xl font-semibold mb-2">🧑‍🌾 Expert Guidance</h2>
         <p className="mb-4">Advice on organic farming, smart irrigation & crop planning from top experts.</p>
-        <div className="flex overflow-x-auto space-x-4 pb-2">
+        <div className="grid md:grid-cols-2 gap-4">
           {experts.map((expert, i) => (
-            <div key={i} className="bg-white min-w-[250px] p-3 rounded shadow flex-shrink-0">
-              <Image src={expert.img} alt={expert.name} width={250} height={180} className="rounded mb-2" />
-              <h3 className="font-bold">{expert.name}</h3>
-              <p>{expert.field}</p>
-              <p className="text-sm text-gray-600">{expert.contact}</p>
+            <div
+              key={i}
+              className="relative h-64 md:h-72 text-white flex items-end p-4 rounded shadow"
+              style={{
+                backgroundImage: `url(${expert.img})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            >
+              <div className="bg-black/60 p-3 rounded">
+                <h3 className="text-xl font-bold">{expert.name}</h3>
+                <p>{expert.field}</p>
+                <p className="text-sm">{expert.contact}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -64,10 +73,19 @@ export default function ContactPage() {
         <p>Inspiring journeys from farmers using modern & organic methods.</p>
         <div className="grid md:grid-cols-2 gap-4 mt-4">
           {farmerStories.map((story, i) => (
-            <div key={i} className="bg-white p-3 rounded shadow">
-              <Image src={story.img} alt={story.name} width={400} height={250} className="rounded mb-2" />
-              <h3 className="font-bold">{story.name}</h3>
-              <p>{story.tip}</p>
+            <div
+              key={i}
+              className="relative h-64 md:h-72 text-white flex items-end p-4 rounded shadow"
+              style={{
+                backgroundImage: `url(${story.img})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            >
+              <div className="bg-black/60 p-3 rounded">
+                <h3 className="text-xl font-bold">{story.name}</h3>
+                <p>{story.tip}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -93,10 +111,19 @@ export default function ContactPage() {
         <p>Explore exotic high-demand crops like broccoli & dragon fruit.</p>
         <div className="grid md:grid-cols-2 gap-4 mt-4">
           {modernCrops.map((crop, i) => (
-            <div key={i} className="bg-white p-3 rounded shadow">
-              <Image src={crop.img} alt={crop.name} width={400} height={250} className="rounded mb-2" />
-              <h3 className="font-bold">{crop.name}</h3>
-              <p>{crop.tip}</p>
+            <div
+              key={i}
+              className="relative h-64 md:h-72 text-white flex items-end p-4 rounded shadow"
+              style={{
+                backgroundImage: `url(${crop.img})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            >
+              <div className="bg-black/60 p-3 rounded">
+                <h3 className="text-xl font-bold">{crop.name}</h3>
+                <p>{crop.tip}</p>
+              </div>
             </div>
           ))}
         </div>
