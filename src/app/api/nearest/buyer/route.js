@@ -47,14 +47,14 @@ export async function POST(req) {
 
     if (productId) {
       const product = await Product.findById(productId);
-      if (product) {
-        query.category = product.category;
+      if (product && product.category) {
+        query.categories = product.category; // Find buyers with matching category
       }
     }
 
     // Find buyers and populate relevant fields
     const buyers = await User.find(query)
-      .select('username email phone location category image'); // Select only needed fields
+      .select('username email phone location categories image'); // Select only needed fields
 
     const buyersWithDistance = buyers
       .map((buyer) => {

@@ -107,6 +107,7 @@ export default function FarmerMarketplace() {
     if (!selectedProduct) return;
     try {
       setLoading(true);
+      console.log("selectedProduct", selectedProduct);
       const response = await axios.post("/api/nearest/buyer", {
         numberOfBuyers: parseInt(limit),
         productId: selectedProduct,
