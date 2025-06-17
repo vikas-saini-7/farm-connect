@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Search } from 'lucide-react';
+import { getCoordinatesFromLocation, fetchLocationSuggestions } from '@/lib/geocode';
 
 interface FormData {
     email: string;
@@ -38,19 +39,7 @@ export default function RegistrationForm({ role, onBack }: Props) {
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-
-    const availableLocations: string[] = [
-        'Pune', 'Mumbai', 'Bangalore', 'Jaipur', 'Delhi',
-        'Ahilyanagar', 'Nashik', 'Indore', 'Surat', 'Ahmedabad',
-        'Nanded', 'Latur', 'Beed', 'Buldhana', 'Dharashiv',
-        'Jalna', 'Sambhajinagar', 'Thane', 'Ratnagiri', 'Dhule',
-        'Jalgaon', 'Satara', 'Sangli', 'Solapur', 'Kolhapur', 'Nagpur',
-        'Ahmednagar', 'Akola', 'Amravati', 'Aurangabad',
-        'Bhandara', 'Chandrapur', 'Gadchiroli', 'Gondia',
-        'Hingoli', 'Mumbai City', 'Mumbai Suburban',
-        'Nandurbar', 'Osmanabad', 'Palghar', 'Parbhani',
-        'Raigad', 'Sindhudurg', 'Wardha', 'Washim', 'Yavatmal'
-    ];
+    const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
 
     const categories: Category[] = [
         { id: 'vegetables', label: 'Vegetables' },
@@ -62,15 +51,19 @@ export default function RegistrationForm({ role, onBack }: Props) {
         { id: 'livestock', label: 'Livestock'}
     ];
 
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
-        
+
         if (name === 'location' && value.trim() !== '') {
-            const filtered = availableLocations.filter(loc => 
-                loc.toLowerCase().includes(value.toLowerCase())
-            );
-            setLocationSuggestions(filtered);
+            if (debounceTimer) clearTimeout(debounceTimer);
+
+            const timer = setTimeout(async () => {
+                const suggestions = await fetchLocationSuggestions(value);
+                setLocationSuggestions(suggestions);
+            }, 300); // debounce delay 300ms
+
+            setDebounceTimer(timer);
         } else {
             setLocationSuggestions([]);
         }
@@ -225,7 +218,7 @@ export default function RegistrationForm({ role, onBack }: Props) {
                         />
                     </div>
                     
-                    <div className="relative">
+                    {/* <div className="relative">
                         <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
                         <div className="relative">
                             <input
@@ -251,6 +244,37 @@ export default function RegistrationForm({ role, onBack }: Props) {
                                         {location}
                                     </li>
                                 ))}
+                            </ul>
+                        )}
+                    </div> */}
+
+                    <div className="relative">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                        <div className="relative">
+                            <input
+                            type="text"
+                            name="location"
+                            value={formData.location}
+                            onChange={handleInputChange}
+                            required
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none"
+                            placeholder="Search your location"
+                            autoComplete="off"
+                            />
+                            <Search className="absolute right-3 top-2.5 text-gray-400" size={18} />
+                        </div>
+
+                        {locationSuggestions.length > 0 && (
+                            <ul className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-auto">
+                            {locationSuggestions.map((location) => (
+                                <li
+                                key={location}
+                                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                onClick={() => handleLocationSelect(location)}
+                                >
+                                {location}
+                                </li>
+                            ))}
                             </ul>
                         )}
                     </div>
