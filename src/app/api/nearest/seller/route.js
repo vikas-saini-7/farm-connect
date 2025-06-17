@@ -44,7 +44,7 @@ export async function POST(req) {
     const { latitude: sellerLat, longitude: sellerLon } = seller.location;
 
     // Build the query based on whether productId is provided
-    let query = { role: "Seller", category, location: { $exists: true }  };
+    let query = { role: "Seller", categories: category, location: { $exists: true }  };
 
     // Find buyers and populate relevant fields
     const buyers = await User.find(query)
