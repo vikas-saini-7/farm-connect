@@ -170,7 +170,7 @@ const ProductsPage = () => {
       setLoading(true)
       const response = await axios.get('/api/product/allProduct')
       setProducts(response.data.data)
-      console.log(response.data.data);
+      // console.log(response.data.data);
       
       setError(null)
     } catch (err) {

@@ -17,7 +17,7 @@ export async function GET(req) {
       );
     }
 
-    console.log("user:", session.user)
+    // console.log("user:", session.user)
 
     const products = await Product.find({ seller_id: session.user.id });
 

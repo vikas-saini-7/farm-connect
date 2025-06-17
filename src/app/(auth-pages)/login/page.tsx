@@ -1,14 +1,15 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { signIn } from 'next-auth/react' // ensure you have this installed
+import { useEffect, useState } from 'react'
+import { signIn, useSession } from 'next-auth/react'
 import { motion } from 'framer-motion'
 import Footer from '@/components/landing/Footer'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 const Login = () => {
-  const router = useRouter()
+  const router = useRouter();
+  
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -26,7 +27,7 @@ const Login = () => {
     if (res?.error) {
       setError('Invalid credentials')
     } else {
-      router.push('/dashboard') // redirect after login
+      router.push('/onboarding')
     }
   }
 
@@ -72,7 +73,7 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition"
+              className="w-full bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 hover:cursor-pointer transition"
             >
               Log In
             </button>

@@ -1,36 +1,30 @@
 "use client";
 import { ReactNode, useEffect } from "react";
-import { useSession } from "next-auth/react";
 import DashboardHeader from "@/components/dashboard/common/DashboardHeader";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/dashboard/common/AppSidebar";
 import { useProfile } from "@/store/useProfile";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
-  const { data: session, status } = useSession();
   const fetchProfile = useProfile((state) => state.fetchProfile);
-  const router = useRouter();
-
   const profile = useProfile((state) => state.profile);
   const isLoading = useProfile((state) => state.isLoading);
+  const router = useRouter();
 
   useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/login");
-      return;
-    }
-
     fetchProfile();
-    // console.log("NextAuth Session:", session);
-    // console.log("Auth Status:", status);
-  }, [fetchProfile, session, status]);
+  }, [fetchProfile]);
+
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!isLoading && profile && !profile.isOnboarded) {
-      router.push("/onboarding");
+      if (!pathname.startsWith("/onboarding")) {
+        router.push("/onboarding");
+      }
     }
-  }, [profile, isLoading, router]);
+  }, [profile, isLoading, pathname, router]);
 
   if (isLoading) {
     return (

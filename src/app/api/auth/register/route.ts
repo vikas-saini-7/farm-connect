@@ -8,13 +8,12 @@ export async function POST(req: NextRequest) {
     await connectDB();
     const body = await req.json();
 
-    const existingUser = await User.findOne({ username: body.username });
+    const existingUser = await User.findOne({ email: body.email });
     if (existingUser) {
       return NextResponse.json({ message: "User already exists" }, { status: 409 });
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(body.password, salt);
+    const hash = await bcrypt.hash(body.password, 10);
 
     const newUser = new User({
       username: body.username,
@@ -25,8 +24,8 @@ export async function POST(req: NextRequest) {
     await newUser.save();
 
     return NextResponse.json({ message: "User created successfully" }, { status: 200 });
-  } catch (err) {
-    console.error("Server error:", err);
-    return NextResponse.json({ message: "Server Error", error: err }, { status: 500 });
+  } catch (err: any) {
+    console.error("Server error:", err.message);
+    return NextResponse.json({ message: "Server Error" }, { status: 500 });
   }
 }
