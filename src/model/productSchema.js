@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const ProductSchema = new mongoose.Schema({
   category: {
     type: String,
-    enum: ["Fruits", "Vegetables", "Grains", "Dairy", "Livestock", "Pulses", "Others"], // Defined categories
+    enum: ['vegetables', 'fruits', 'grains', 'pulses', 'spices', 'dairy', 'livestock'], // Defined categories
     required: true,
   },
   productName: {
