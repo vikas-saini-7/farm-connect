@@ -14,6 +14,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "text", placeholder: "jsmith@example.com" },
         password: { label: "Password", type: "password" },
       },
+      
       async authorize(credentials) {
         try {
           await connectDB();
@@ -71,6 +72,7 @@ export const authOptions: NextAuthOptions = {
           } else {
             user.id = existingUser._id.toString();
           }
+          return true;
         } catch (error) {
           console.error("Google sign-in error:", error);
           return false;

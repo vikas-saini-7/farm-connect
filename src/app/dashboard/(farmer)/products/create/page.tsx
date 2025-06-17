@@ -15,9 +15,11 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { useRouter } from 'next/navigation'
 
 const ProductCreate = () => {
 //   const { toast } = useToast()
+  const router = useRouter();
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     category: '',
@@ -64,6 +66,7 @@ const ProductCreate = () => {
           image: '',
           quantity: ''
         })
+        router.push('/dashboard/products');
       } else {
         throw new Error(response.data.error || 'Failed to create product')
       }
@@ -99,6 +102,7 @@ const ProductCreate = () => {
                   <SelectItem value="Grains">Grains</SelectItem>
                   <SelectItem value="Dairy">Dairy</SelectItem>
                   <SelectItem value="Livestock">Livestock</SelectItem>
+                  <SelectItem value='Pulses'>Pulses</SelectItem>
                   <SelectItem value="Others">Others</SelectItem>
                 </SelectContent>
               </Select>

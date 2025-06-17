@@ -12,7 +12,6 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
   },
   contactNumber: {
     type: String,
@@ -33,11 +32,10 @@ const UserSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Review"
   }],
-  category: {
+  categories: [{
     type: String,
-    enum: ["Fruits", "Vegetables", "Grains", "Dairy", "Livestock" , "Others"],
- 
-  },
+    enum: ['vegetables', 'fruits', 'grains', 'pulses', 'spices', 'dairy', 'livestock']
+  }],
   role: {
     type: String,
     enum: ["Seller", "Buyer"],
@@ -52,4 +50,4 @@ const UserSchema = new mongoose.Schema({
   isOnboarded: { type: Boolean, default: false }
 }, { timestamps: true });
 
-export default mongoose.models.User || mongoose.model("User", UserSchema);
+export default mongoose.models?.User || mongoose.model("User", UserSchema);
