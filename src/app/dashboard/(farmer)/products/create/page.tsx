@@ -97,13 +97,13 @@ const ProductCreate = () => {
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Fruits">Fruits</SelectItem>
-                  <SelectItem value="Vegetables">Vegetables</SelectItem>
-                  <SelectItem value="Grains">Grains</SelectItem>
-                  <SelectItem value="Dairy">Dairy</SelectItem>
-                  <SelectItem value="Livestock">Livestock</SelectItem>
-                  <SelectItem value='Pulses'>Pulses</SelectItem>
-                  <SelectItem value="Others">Others</SelectItem>
+                  <SelectItem value="fruits">Fruits</SelectItem>
+                  <SelectItem value="vegetables">Vegetables</SelectItem>
+                  <SelectItem value="grains">Grains</SelectItem>
+                  <SelectItem value="dairy">Dairy</SelectItem>
+                  <SelectItem value="livestock">Livestock</SelectItem>
+                  <SelectItem value='pulses'>Pulses</SelectItem>
+                  <SelectItem value='spices'>Spices</SelectItem>
                 </SelectContent>
               </Select>
             </div>
