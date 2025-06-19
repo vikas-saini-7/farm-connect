@@ -32,41 +32,41 @@ export async function POST(req) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const sellerId = session.user.id;
+    const buyerId = session.user.id;
     const { numberOfSellers = 5, category } = await req.json();
 
     // Fetch seller's location
-    const seller = await User.findById(sellerId);
-    if (!seller || !seller.location) {
+    const buyer = await User.findById(buyerId);
+    if (!buyer || !buyer.location) {
       return NextResponse.json({ error: "Seller location not found" }, { status: 404 });
     }
 
-    const { latitude: sellerLat, longitude: sellerLon } = seller.location;
+    const { latitude: buyerLat, longitude: buyerLon } = buyer.location;
 
     // Build the query based on whether productId is provided
     let query = { role: "Seller", categories: category, location: { $exists: true }  };
 
     // Find buyers and populate relevant fields
-    const buyers = await User.find(query)
-      .select('username email phone location category image'); // Select only needed fields
+    const sellers = await User.find(query)
+      .select('username email phone location categories image');
 
-    const sellersWithDistance = buyers
-      .map((buyer) => {
-        const { latitude, longitude } = buyer.location || {};
+    const sellersWithDistance = sellers
+      .map((seller) => {
+        const { latitude, longitude } = seller.location || {};
         if (latitude == null || longitude == null) return null;
 
-        const distance = getDistance(sellerLat, sellerLon, latitude, longitude);
+        const distance = getDistance(buyerLat, buyerLon, latitude, longitude);
         return {
-          buyer: {
-            id: buyer._id,
-            username: buyer.username,
-            email: buyer.email,
-            phone: buyer.phone,
-            image: buyer.image,
-            category: buyer.category
+          seller: {
+            id: seller._id,
+            username: seller.username,
+            email: seller.email,
+            phone: seller.phone,
+            image: seller.image,
+            category: seller.category
           },
           distance,
-          location: buyer.location,
+          location: seller.location,
         };
       })
       .filter(Boolean)

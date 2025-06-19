@@ -54,12 +54,13 @@ const limitOptions = [
 ];
 
 const categoryOptions = [
-  { value: "Fruits", label: "Fruits" },
-  { value: "Vegetables", label: "Vegetables" },
-  { value: "Grains", label: "Grains" },
-  { value: "Dairy", label: "Dairy" },
-  { value: "Livestock", label: "Livestock" },
-  { value: "Others", label: "Others" },
+  { value: "fruits", label: "Fruits" },
+  { value: "vegetables", label: "Vegetables" },
+  { value: "grains", label: "Grains" },
+  { value: "dairy", label: "Dairy" },
+  { value: "livestock", label: "Livestock" },
+  { value: "pulses", label: "Pulses" },
+  { value: "spices", label: "Spices" },
 ];
 
 export default function FarmerMarketplace() {
@@ -198,9 +199,9 @@ export default function FarmerMarketplace() {
               </Badge>
             </h3>
             <div className="grid gap-4">
-              {buyers.map((buyer) => (
+              {buyers.map((buyer, idx) => (
                 <Card
-                  key={buyer.buyer.id}
+                  key={idx}
                   className="p-4 transition-all duration-300 hover:shadow-lg hover:border-green-200 cursor-pointer bg-white/60 backdrop-blur-sm"
                   onClick={() => handleBuyerClick(buyer)}
                 >
