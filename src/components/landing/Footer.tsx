@@ -9,7 +9,7 @@ export default function Footer() {
         
         {/* Logo & Description */}
         <div>
-          <h2 className="text-2xl font-bold mb-4 text-white">🌾 FarmConnect</h2>
+          <h2 className="text-2xl font-bold mb-4 text-white font-alkatra">FarmConnect</h2>
           <p className="text-sm text-green-100 leading-relaxed">
             Empowering farmers and buyers through transparency, connection, and opportunity.
           </p>
