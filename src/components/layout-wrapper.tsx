@@ -12,7 +12,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
     setLoading(true);
     const timer = setTimeout(() => setLoading(false), 500);
     return () => clearTimeout(timer);
-  }, [pathname]);
+  }, []);
 
   return (
     <>

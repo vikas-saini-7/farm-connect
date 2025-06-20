@@ -63,7 +63,7 @@ export async function POST(req) {
             email: seller.email,
             phone: seller.phone,
             image: seller.image,
-            category: seller.category
+            categories: seller.categories
           },
           distance,
           location: seller.location,

@@ -35,8 +35,8 @@ interface Location {
 }
 
 interface Buyer {
-  buyer: {
-    category: string;
+  seller: {
+    categories: string[];
     email: string;
     id: string;
     username: string;
@@ -91,7 +91,7 @@ export default function FarmerMarketplace() {
         (buyer: Buyer) => ({
           ...buyer,
           buyer: {
-            ...buyer.buyer,
+            ...buyer.seller,
             phone: generateRandomPhone(),
           },
         })
@@ -213,11 +213,18 @@ export default function FarmerMarketplace() {
                         </div>
                         <div>
                           <h4 className="font-medium text-gray-800">
-                            {buyer.buyer.username}
+                            {buyer.seller.username}
                           </h4>
-                          <p className="text-sm text-green-700 font-medium">
-                            {buyer.buyer.category}
-                          </p>
+                          <div className="flex gap-2">
+                            {buyer?.seller?.categories?.map((category, idx) => (
+                              <Badge
+                                key={idx}
+                                className="bg-green-100 text-green-800 hover:bg-green-200"
+                              >
+                                {category}
+                              </Badge>
+                            ))}
+                          </div>
                         </div>
                       </div>
                       <div className="flex items-center gap-4 text-sm text-gray-600">
@@ -261,12 +268,21 @@ export default function FarmerMarketplace() {
                   </div>
                   <div>
                     <DialogTitle className="text-xl text-gray-800">
-                      {selectedBuyer.buyer.username}
+                      {selectedBuyer.seller.username}
                     </DialogTitle>
                     <DialogDescription className="flex items-center gap-2">
-                      <Badge className="bg-green-100 text-green-800 hover:bg-green-200">
-                        {selectedBuyer.buyer.category}
-                      </Badge>
+                      <span className="flex gap-2">
+                        {selectedBuyer?.seller?.categories?.map(
+                          (category, idx) => (
+                            <Badge
+                              key={idx}
+                              className="bg-green-100 text-green-800 hover:bg-green-200"
+                            >
+                              {category}
+                            </Badge>
+                          )
+                        )}
+                      </span>
                       <span className="text-green-600">•</span>
                       <span className="text-gray-600">
                         {selectedBuyer.distance.toFixed(2)} km away
@@ -290,13 +306,13 @@ export default function FarmerMarketplace() {
                         <p className="flex items-center gap-2 text-gray-600">
                           Email:
                           <span className="text-gray-800">
-                            {selectedBuyer.buyer.email}
+                            {selectedBuyer.seller.email}
                           </span>
                         </p>
                         <p className="flex items-center gap-2 text-gray-600">
                           Phone:
                           <span className="text-gray-800">
-                            {selectedBuyer.buyer.phone}
+                            {selectedBuyer.seller.phone}
                           </span>
                         </p>
                       </div>

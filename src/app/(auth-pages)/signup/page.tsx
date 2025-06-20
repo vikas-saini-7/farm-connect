@@ -1,51 +1,51 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import axios from 'axios'
-import { motion } from 'framer-motion'
-import Footer from '@/components/landing/Footer'
-import { signIn } from 'next-auth/react'
-import Link from 'next/link'
-import { redirect } from 'next/dist/server/api-utils'
-import Image from 'next/image'
+import { useState } from "react";
+import axios from "axios";
+import { motion } from "framer-motion";
+import Footer from "@/components/landing/Footer";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
+import { redirect } from "next/dist/server/api-utils";
+import Image from "next/image";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-  })
+    username: "",
+    email: "",
+    password: "",
+  });
 
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
-  
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessage('');
+    setMessage("");
 
     try {
-      const res = await axios.post('/api/auth/register', formData);
+      const res = await axios.post("/api/auth/register", formData);
       setMessage(res.data.message);
 
       if (res.status === 200) {
         // Automatically sign in after successful registration
-        const signInRes = await signIn('credentials', {
+        const signInRes = await signIn("credentials", {
           redirect: false,
           email: formData.email,
           password: formData.password,
         });
 
         if (signInRes?.ok) {
-          window.location.href = '/onboarding';
+          window.location.href = "/onboarding";
         } else {
-          setMessage('Signup succeeded, but auto login failed.');
+          setMessage("Signup succeeded, but auto login failed.");
         }
       }
     } catch (error: any) {
-      const errMsg = error.response?.data?.message || 'Something went wrong!';
+      const errMsg = error.response?.data?.message || "Something went wrong!";
       setMessage(errMsg);
     }
   };
@@ -59,7 +59,9 @@ const Signup = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-3xl font-bold text-green-700 text-center mb-6">Create an Account 🌿</h2>
+          <h2 className="text-3xl font-bold text-green-700 text-center mb-6">
+            Create an Account 🌿
+          </h2>
 
           {message && (
             <p className="text-center text-green-700 text-sm mb-4">{message}</p>
@@ -67,7 +69,9 @@ const Signup = () => {
 
           <form onSubmit={handleSignup} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Username</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Username
+              </label>
               <input
                 type="text"
                 name="username"
@@ -79,7 +83,9 @@ const Signup = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Email</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Email
+              </label>
               <input
                 type="email"
                 name="email"
@@ -91,7 +97,9 @@ const Signup = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Password</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
               <input
                 type="password"
                 name="password"
@@ -108,27 +116,26 @@ const Signup = () => {
             >
               Sign Up
             </button>
-            {/* <button className='hover:cursor-pointer' onClick={() => signIn("google", { callbackUrl: "/onboarding" })}>
-              Login With Google
-            </button> */}
-            <div className="flex items-center justify-center space-x-4">
-            <button
-              onClick={() => signIn("google", { callbackUrl: "/onboarding" })}
-              className="flex items-center gap-3 px-6 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:shadow-md hover:bg-gray-100 transition cursor-pointer"
-            >
-              <Image
-                src="https://cdn-icons-png.flaticon.com/512/2702/2702602.png"
-                width={24}
-                height={24}
-                alt="Google icon"
-              />
-              <span className="font-medium text-sm sm:text-base">Login with Google</span>
-            </button>
-          </div>
           </form>
+          <div className="flex items-center justify-center space-x-4">
+              <button
+                onClick={() => signIn("google", { callbackUrl: "/onboarding" })}
+                className="mt-4 flex items-center gap-3 px-6 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:shadow-md hover:bg-gray-100 transition cursor-pointer"
+              >
+                <Image
+                  src="https://cdn-icons-png.flaticon.com/512/2702/2702602.png"
+                  width={24}
+                  height={24}
+                  alt="Google icon"
+                />
+                <span className="font-medium text-sm sm:text-base">
+                  Login with Google
+                </span>
+              </button>
+            </div>
 
           <p className="text-center text-sm text-gray-600 mt-6">
-            Already have an account?{' '}
+            Already have an account?{" "}
             <Link href="/login" className="text-green-600 hover:underline">
               Log in
             </Link>
@@ -137,7 +144,7 @@ const Signup = () => {
       </div>
       <Footer />
     </>
-  )
-}
+  );
+};
 
-export default Signup
+export default Signup;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { MapPin, User, CheckCircle } from "lucide-react";
+import { MapPin, User, CheckCircle, AlertCircle } from "lucide-react";
 import axios from "axios";
 import { useProfile } from "@/store/useProfile";
 
@@ -72,12 +72,15 @@ export default function FarmerMarketplace() {
 
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const handleRequestClick = () => {
-    setShowConfirmation(true);
-    setTimeout(() => {
-      setShowConfirmation(false);
-      setIsModalOpen(false);
-    }, 2000);
+  const handleRequestClick = async() => {
+    const res = await axios.post("/api/request/send", {buyerId: selectedBuyer?.buyer.id});
+    if(res.status === 200) {
+      setShowConfirmation(true);
+      setTimeout(() => {
+        setShowConfirmation(false);
+        setIsModalOpen(false);
+      }, 2000);
+    }
   };
 
   const generateRandomPhone = () => {

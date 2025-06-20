@@ -96,7 +96,7 @@ const buyerNav = [
   },
   {
     title: "Calendar",
-    url: "/dashboard/calender",
+    url: "/dashboard/buyer-calender",
     icon: Home,
   },
   // {
@@ -116,7 +116,7 @@ const buyerNav = [
   },
   {
     title: "Analytics",
-    url: "/dashboard/analytics",
+    url: "/dashboard/buyer-analytics",
     icon: BarChart2,
   },
 ];
