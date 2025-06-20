@@ -56,6 +56,8 @@ export async function POST(req) {
     const buyers = await User.find(query)
       .select('username email phone location categories image'); // Select only needed fields
 
+    // console.log(buyers);
+
     const buyersWithDistance = buyers
       .map((buyer) => {
         const { latitude, longitude } = buyer.location || {};
