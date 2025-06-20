@@ -148,8 +148,11 @@ interface ReviewData {
   };
   createdAt: string;
 }
+interface ReviewComponentProps {
+  userId: string | undefined;
+}
 
-const ReviewComponent = () => {
+const ReviewComponent: React.FC<ReviewComponentProps> = ({ userId }) => {
   const searchParams = useSearchParams();
   const paramId = searchParams.get("paramId");
 

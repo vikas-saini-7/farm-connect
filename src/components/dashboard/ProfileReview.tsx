@@ -4,6 +4,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 interface Review {
   _id: string;
@@ -19,11 +20,29 @@ interface Review {
 
 interface ReviewPageProps {
   userId: string | null;
-  reviews: Review[];
+  // reviews: Review[];
 }
 
-export default function ReviewPage({ userId, reviews }: ReviewPageProps) {
-  const { data: session, status } = useSession();
+export default function ReviewPage({ userId }: ReviewPageProps) {
+  // const { data: session, status } = useSession();
+  const [reviews, setReviews] = useState<Review[]>([]);
+//   const searchParams = useSearchParams();
+//   const paramId = searchParams.get("paramId");
+
+  const fetchReviews = async () => {
+    try {
+      const res = await axios.get(`/api/review/userReview?userId=${userId}`)
+      setReviews(res.data.reviews);
+    } catch (error) {
+      console.error("Failed to fetch reviews:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (userId) {
+      fetchReviews();
+    }
+  }, [userId]);
 
   return (
     <div>
