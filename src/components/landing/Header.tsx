@@ -13,8 +13,8 @@ export default function Header() {
         {/* Logo */}
         <div className="text-emerald-700 text-3xl font-extrabold tracking-tight">
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-4xl">🌱</span>
-            <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+            {/* <span className="text-4xl">🌱</span> */}
+            <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent font-alkatra">
               FarmConnect
             </span>
           </Link>

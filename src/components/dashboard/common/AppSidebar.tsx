@@ -130,8 +130,8 @@ export function AppSidebar() {
     <Sidebar className="bg-white/10 backdrop-blur-md border-r border-gray-100 dark:border-gray-800 w-64">
       <SidebarContent>
         <div className="px-6 py-6">
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-green-400 bg-clip-text text-transparent">
-            Farm Connect
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent font-alkatra">
+            FarmConnect
           </h2>
         </div>
 

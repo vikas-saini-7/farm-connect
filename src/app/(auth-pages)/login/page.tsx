@@ -14,10 +14,12 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     const res = await signIn("credentials", {
       redirect: false,
@@ -25,10 +27,12 @@ const Login = () => {
       password,
     });
 
+
     if (res?.error) {
       setError("Invalid credentials");
     } else {
       router.push("/onboarding");
+      setLoading(false);
     }
   };
 
@@ -42,7 +46,7 @@ const Login = () => {
           transition={{ duration: 0.8 }}
         >
           <h2 className="text-3xl font-bold text-green-700 text-center mb-6">
-            Welcome Back 👋
+            Welcome Back
           </h2>
 
           <form onSubmit={handleLogin} className="space-y-5">
@@ -77,10 +81,11 @@ const Login = () => {
             )}
 
             <button
+              disabled={loading}
               type="submit"
               className="w-full bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 hover:cursor-pointer transition"
             >
-              Log In
+              {loading ? "logging In..." : "Log In"}
             </button>
           </form>
           <button

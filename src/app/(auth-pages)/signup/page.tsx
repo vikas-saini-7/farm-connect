@@ -17,6 +17,7 @@ const Signup = () => {
   });
 
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,6 +26,7 @@ const Signup = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage("");
+    setLoading(true);
 
     try {
       const res = await axios.post("/api/auth/register", formData);
@@ -42,6 +44,7 @@ const Signup = () => {
           window.location.href = "/onboarding";
         } else {
           setMessage("Signup succeeded, but auto login failed.");
+          setLoading(false);
         }
       }
     } catch (error: any) {
@@ -60,7 +63,7 @@ const Signup = () => {
           transition={{ duration: 0.8 }}
         >
           <h2 className="text-3xl font-bold text-green-700 text-center mb-6">
-            Create an Account 🌿
+            Create an Account
           </h2>
 
           {message && (
@@ -111,10 +114,11 @@ const Signup = () => {
             </div>
 
             <button
+              disabled={loading}
               type="submit"
               className="w-full bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 hover:cursor-pointer transition"
             >
-              Sign Up
+              {loading ? "Signing up..." : "Sign Up"}
             </button>
           </form>
           <div className="flex items-center justify-center space-x-4">
