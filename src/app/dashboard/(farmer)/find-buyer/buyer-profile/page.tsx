@@ -65,7 +65,7 @@ export default function BuyerProfile() {
       setTimeout(() => setShowConfirmation(false), 2000);
     }
   };
-
+  if (loading) return <div className="text-center p-10">Loading...</div>;
   if (!buyer) return <div className="text-center p-10">Buyer not found</div>;
 
   return (

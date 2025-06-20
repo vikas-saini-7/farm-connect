@@ -1,3 +1,5 @@
+// File: app/dashboard/(buyer)/manage-requests/seller-profile/[sellerId]/page.tsx
+
 "use client";
 
 import React, { useEffect, useState } from "react";

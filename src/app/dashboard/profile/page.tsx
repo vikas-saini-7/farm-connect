@@ -21,48 +21,10 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 import { Interface } from "readline";
 import ReviewPage from "@/components/dashboard/ReviewPage";
-
-// Dummy reviews data
-// const dummyReviews = [
-//   {
-//     id: 1,
-//     text: "Excellent quality products, always fresh!",
-//     rating: 5,
-//     reviewer: "Ramesh Patel",
-//   },
-//   {
-//     id: 2,
-//     text: "Fast delivery and great communication.",
-//     rating: 5,
-//     reviewer: "Suresh Yadav",
-//   },
-//   {
-//     id: 3,
-//     text: "The produce was good but arrived a bit late.",
-//     rating: 4,
-//     reviewer: "Rajeev Reddy",
-//   },
-//   {
-//     id: 4,
-//     text: "Great seller, responsive and professional.",
-//     rating: 5,
-//     reviewer: "Mahesh Singh",
-//   },
-//   {
-//     id: 5,
-//     text: "Product quality was good but packaging could be better.",
-//     rating: 4,
-//     reviewer: "Anil Deshmukh",
-//   },
-//   {
-//     id: 6,
-//     text: "Ordered multiple times, consistently excellent service!",
-//     rating: 5,
-//     reviewer: "Yashraj Mishra",
-//   },
-// ];
+import ProfileReview from "@/components/dashboard/ProfileReview";
 
 const ProfilePage = () => {
+  const review = [];
 
   const { profile, isLoading, error, fetchProfile } = useProfile();
   const {data: session, status} = useSession();
@@ -270,7 +232,7 @@ const ProfilePage = () => {
               <CardContent className="p-6">
                 <h2 className="text-xl font-semibold mb-4">Recent Reviews</h2>
                 <div className="space-y-3 max-h-70 overflow-y-auto pr-1">
-                  {session?.user.id && <ReviewPage userId={session.user.id} />}
+                  {session?.user.id && <ProfileReview userId={session?.user.id} />}
                 </div>
               </CardContent>
             </Card>
