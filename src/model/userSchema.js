@@ -28,10 +28,17 @@ const UserSchema = new mongoose.Schema({
       type: Number,
     }
   },  
-  reviews:[ {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Review"
-  }],
+  // reviews:[ {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Review"
+  // }],
+  reviews: {
+    type: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Review"
+    }],
+    default: []
+  },
   categories: [{
     type: String,
     enum: ['vegetables', 'fruits', 'grains', 'pulses', 'spices', 'dairy', 'livestock']

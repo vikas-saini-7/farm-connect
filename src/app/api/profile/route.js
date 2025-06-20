@@ -48,9 +48,6 @@ import { NextResponse } from "next/server";
 import connectDB from "../../../lib/connectDB";
 import User from "../../../model/userSchema";
 
-// GET handler (already written by you)
-// keeping as is
-
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);

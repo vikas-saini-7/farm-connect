@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -18,50 +18,54 @@ import { useProfile } from "@/store/useProfile";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import axios from "axios";
+import { Interface } from "readline";
+import ReviewPage from "@/components/dashboard/ReviewPage";
 
 // Dummy reviews data
-const dummyReviews = [
-  {
-    id: 1,
-    text: "Excellent quality products, always fresh!",
-    rating: 5,
-    reviewer: "Ramesh Patel",
-  },
-  {
-    id: 2,
-    text: "Fast delivery and great communication.",
-    rating: 5,
-    reviewer: "Suresh Yadav",
-  },
-  {
-    id: 3,
-    text: "The produce was good but arrived a bit late.",
-    rating: 4,
-    reviewer: "Rajeev Reddy",
-  },
-  {
-    id: 4,
-    text: "Great seller, responsive and professional.",
-    rating: 5,
-    reviewer: "Mahesh Singh",
-  },
-  {
-    id: 5,
-    text: "Product quality was good but packaging could be better.",
-    rating: 4,
-    reviewer: "Anil Deshmukh",
-  },
-  {
-    id: 6,
-    text: "Ordered multiple times, consistently excellent service!",
-    rating: 5,
-    reviewer: "Yashraj Mishra",
-  },
-];
+// const dummyReviews = [
+//   {
+//     id: 1,
+//     text: "Excellent quality products, always fresh!",
+//     rating: 5,
+//     reviewer: "Ramesh Patel",
+//   },
+//   {
+//     id: 2,
+//     text: "Fast delivery and great communication.",
+//     rating: 5,
+//     reviewer: "Suresh Yadav",
+//   },
+//   {
+//     id: 3,
+//     text: "The produce was good but arrived a bit late.",
+//     rating: 4,
+//     reviewer: "Rajeev Reddy",
+//   },
+//   {
+//     id: 4,
+//     text: "Great seller, responsive and professional.",
+//     rating: 5,
+//     reviewer: "Mahesh Singh",
+//   },
+//   {
+//     id: 5,
+//     text: "Product quality was good but packaging could be better.",
+//     rating: 4,
+//     reviewer: "Anil Deshmukh",
+//   },
+//   {
+//     id: 6,
+//     text: "Ordered multiple times, consistently excellent service!",
+//     rating: 5,
+//     reviewer: "Yashraj Mishra",
+//   },
+// ];
 
 const ProfilePage = () => {
 
   const { profile, isLoading, error, fetchProfile } = useProfile();
+  const {data: session, status} = useSession();
 
   if (isLoading)
     return (
@@ -266,32 +270,7 @@ const ProfilePage = () => {
               <CardContent className="p-6">
                 <h2 className="text-xl font-semibold mb-4">Recent Reviews</h2>
                 <div className="space-y-3 max-h-70 overflow-y-auto pr-1">
-                  {dummyReviews.map((review) => (
-                    <div
-                      key={review.id}
-                      className="p-3 bg-secondary/10 rounded-lg border"
-                    >
-                      <div className="flex justify-between items-start">
-                        <div className="text-sm font-medium">
-                          {review.reviewer}
-                        </div>
-                        <div className="flex items-center">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`h-4 w-4 ${
-                                i < review.rating
-                                  ? "text-yellow-500"
-                                  : "text-gray-300"
-                              }`}
-                              fill={i < review.rating ? "currentColor" : "none"}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                      <p className="text-sm mt-1">{review.text}</p>
-                    </div>
-                  ))}
+                  {session?.user.id && <ReviewPage userId={session.user.id} />}
                 </div>
               </CardContent>
             </Card>

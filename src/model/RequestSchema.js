@@ -1,20 +1,16 @@
 import mongoose from "mongoose";
 
 const requestSchema = new mongoose.Schema({
-  sellerId: {
+  reqFrom: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  buyerId: {
+  reqTo: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  }
-});
+}, { timestamps: true });
 
 export default mongoose.models.Request || mongoose.model("Request", requestSchema);

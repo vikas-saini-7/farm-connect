@@ -23,6 +23,7 @@ import dynamic from "next/dynamic";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { useRouter } from "next/navigation";
 
 const MapView = dynamic(() => import("@/components/farmer/MapView"), {
   ssr: false,
@@ -35,8 +36,8 @@ interface Location {
 }
 
 interface Buyer {
-  buyer: {
-    category: string;
+  seller: {
+    categories: string[];
     email: string;
     id: string;
     username: string;
@@ -91,7 +92,7 @@ export default function FarmerMarketplace() {
         (buyer: Buyer) => ({
           ...buyer,
           buyer: {
-            ...buyer.buyer,
+            ...buyer.seller,
             phone: generateRandomPhone(),
           },
         })
@@ -112,7 +113,10 @@ export default function FarmerMarketplace() {
     }
   }, [limit, selectedCategory]);
 
+  const router = useRouter();
+
   const handleBuyerClick = (buyer: Buyer) => {
+    router.push(`/dashboard/manage-requests/seller-profile?sellerId=${buyer.seller.id}`)
     setSelectedBuyer(buyer);
     setIsModalOpen(true);
   };
@@ -213,11 +217,18 @@ export default function FarmerMarketplace() {
                         </div>
                         <div>
                           <h4 className="font-medium text-gray-800">
-                            {buyer.buyer.username}
+                            {buyer.seller.username}
                           </h4>
-                          <p className="text-sm text-green-700 font-medium">
-                            {buyer.buyer.category}
-                          </p>
+                          <div className="flex gap-2">
+                            {buyer?.seller?.categories?.map((category, idx) => (
+                              <Badge
+                                key={idx}
+                                className="bg-green-100 text-green-800 hover:bg-green-200"
+                              >
+                                {category}
+                              </Badge>
+                            ))}
+                          </div>
                         </div>
                       </div>
                       <div className="flex items-center gap-4 text-sm text-gray-600">
@@ -250,97 +261,7 @@ export default function FarmerMarketplace() {
       </div>
 
       {/* Buyer Details Modal */}
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-lg bg-white/95 backdrop-blur-sm">
-          {selectedBuyer && (
-            <>
-              <DialogHeader>
-                <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-full bg-green-50 flex items-center justify-center border border-green-100">
-                    <User className="h-6 w-6 text-green-600" />
-                  </div>
-                  <div>
-                    <DialogTitle className="text-xl text-gray-800">
-                      {selectedBuyer.buyer.username}
-                    </DialogTitle>
-                    <DialogDescription className="flex items-center gap-2">
-                      <Badge className="bg-green-100 text-green-800 hover:bg-green-200">
-                        {selectedBuyer.buyer.category}
-                      </Badge>
-                      <span className="text-green-600">•</span>
-                      <span className="text-gray-600">
-                        {selectedBuyer.distance.toFixed(2)} km away
-                      </span>
-                    </DialogDescription>
-                  </div>
-                </div>
-              </DialogHeader>
-
-              <Separator className="bg-green-100" />
-
-              <div className="grid gap-6 py-4">
-                <Card className="p-4 bg-green-50/50 border-green-100">
-                  <div className="flex items-start gap-3">
-                    <User className="h-5 w-5 text-green-600 mt-0.5" />
-                    <div className="space-y-1.5">
-                      <h3 className="font-medium text-gray-800">
-                        Contact Information
-                      </h3>
-                      <div className="text-sm space-y-1">
-                        <p className="flex items-center gap-2 text-gray-600">
-                          Email:
-                          <span className="text-gray-800">
-                            {selectedBuyer.buyer.email}
-                          </span>
-                        </p>
-                        <p className="flex items-center gap-2 text-gray-600">
-                          Phone:
-                          <span className="text-gray-800">
-                            {selectedBuyer.buyer.phone}
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-
-                <Card className="p-4 bg-green-50/50 border-green-100">
-                  <div className="flex items-start gap-3">
-                    <MapPin className="h-5 w-5 text-green-600 mt-0.5" />
-                    <div className="space-y-1.5">
-                      <h3 className="font-medium text-gray-800">
-                        Location Details
-                      </h3>
-                      <div className="text-sm space-y-1">
-                        <p className="text-gray-600">
-                          {selectedBuyer.location.title}
-                        </p>
-                        <div className="flex gap-4 text-gray-600">
-                          <span>Lat: {selectedBuyer.location.latitude}</span>
-                          <span>Long: {selectedBuyer.location.longitude}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              </div>
-
-              <div className="flex justify-end gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setIsModalOpen(false)}
-                  className="hover:bg-green-50 hover:text-green-700 hover:border-green-200"
-                >
-                  Close
-                </Button>
-                {/* <Button className="bg-green-600 hover:bg-green-700 text-white">
-                  Request Buy for visit
-                </Button> */}
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
+      
     </main>
   );
 }
